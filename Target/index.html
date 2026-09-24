@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.payhere.lk https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.payhere.lk; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:;">
+    <meta name="google-site-verification" content="7z1Cqc7CthEcldrOlLCsNL_OYUkFBaf19TjjGyDnXlE" />
+    <title>almpi.com.lk - A/L Paper Skill Builder</title>
+    
+    <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --bg-color: #070b19;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(56, 189, 248, 0.2);
+            --success-bg: rgba(6, 78, 59, 0.85);
+            --success-border: #059669;
+            --success-text: #6ee7b7;
+            --badge-bg: rgba(56, 189, 248, 0.1);
+            --badge-text: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 5-Second Cinematic Preloader Overlay Styles */
+        #website-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #website-preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-content {
+            text-align: center;
+            padding: 30px;
+            max-width: 600px;
+            animation: fadeInPreloader 1s ease-in-out;
+        }
+
+        @keyframes fadeInPreloader {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .preloader-logo-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            margin: 0 auto 20px auto;
+            box-shadow: 0 0 35px rgba(56, 189, 248, 0.4);
+            animation: pulseLogo 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseLogo {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+            50% { transform: scale(1.06); box-shadow: 0 0 45px rgba(56, 189, 248, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+        }
+
+        .preloader-content h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .preloader-subtitle {
+            font-size: 1.15rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-weight: 500;
+            min-height: 32px;
+            letter-spacing: 0.3px;
+        }
+
+        .preloader-spinner-bar {
+            width: 280px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-spinner-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+
+        /* Ambient Glowing Animated Background Orbs */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.35;
+            animation: floatOrb 12s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 450px;
+            height: 450px;
+            background: #1e3a8a;
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #0369a1;
+            bottom: -15%;
+            right: -10%;
+            animation-delay: -4s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: #0f766e;
+            top: 40%;
+            left: 60%;
+            animation-delay: -8s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 50px) scale(1.15); }
+        }
+
+        .wrapper {
+            max-width: 1100px;
+            width: 100%;
+            margin: 20px auto 40px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Navigation Bar */
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        .nav-email-btn {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-email-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--text-main);
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Space Hero Showcase Intro Section */
+        .space-hero-intro {
+            position: relative;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(7, 11, 25, 0.95) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 45px 30px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+        }
+
+        .space-hero-intro::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .space-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .space-hero-subtitle-top {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .space-hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .space-hero-title span {
+            color: var(--primary);
+            text-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+
+        .space-hero-desc {
+            max-width: 750px;
+            margin: 0 auto 25px auto;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .space-hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .space-hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(2, 132, 199, 0.5);
+            text-decoration: none;
+        }
+
+        .space-hero-btn:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(14, 165, 233, 0.7);
+        }
+
+        .space-hero-nav-pills {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 30px auto 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .space-pill {
+            cursor: pointer;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .space-pill:hover, .space-pill.active {
+            color: var(--primary);
+        }
+
+        /* Dynamic Status Notification Bar Styles */
+        #session-status-bar {
+            display: none;
+            max-width: 1100px;
+            margin: 0 auto 25px auto;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.4s ease-in-out;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        #session-status-bar.customer-view-bar {
+            background: rgba(6, 78, 59, 0.75);
+            border: 1px solid #059669;
+            color: #6ee7b7;
+        }
+
+        #session-status-bar.admin-view-bar {
+            background: rgba(120, 53, 15, 0.75);
+            border: 1px solid #d97706;
+            color: #fcd34d;
+        }
+
+        .status-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Initial Login Form Styles */
+        #auth-modal {
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        #auth-modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        #auth-modal p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        }
+
+        /* Main App Container */
+        #app-container {
+            display: none;
+        }
+
+        .nav-back {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 25px;
+            transition: background 0.2s;
+            width: fit-content;
+        }
+
+        .nav-back:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .section-view {
+            display: none;
+        }
+
+        .section-view.active {
+            display: grid;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .feature-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .btn-pay {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn-pay:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .locked-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            border-radius: 12px;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .locked-content h4 {
+            color: var(--success-text);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .locked-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #059669;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Policy Pages Styles */
+        .policy-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 35px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+
+        .policy-container h2 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .policy-container h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .policy-container p, .policy-container ul {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .policy-container ul {
+            padding-left: 20px;
+        }
+
+        .policy-container li {
+            margin-bottom: 8px;
+        }
+
+        /* Alinx AI Assistant Widget Styles */
+        #alinx-widget-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            font-family: 'Poppins', sans-serif;
+            user-select: text;
+        }
+
+        .alinx-maintenance-banner {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9), rgba(185, 28, 28, 0.95));
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: pulseBanner 2s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        @keyframes pulseBanner {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        #alinx-toggle-btn {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #070b19;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #alinx-toggle-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px rgba(56, 189, 248, 0.7);
+        }
+
+        #alinx-chat-box {
+            display: none;
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            width: 380px;
+            height: 560px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .alinx-chat-header {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(2, 132, 199, 0.25));
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .alinx-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alinx-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #070b19;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .alinx-title h4 {
+            font-size: 1rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .alinx-title span {
+            font-size: 0.75rem;
+            color: var(--success-text);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .alinx-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .alinx-close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .alinx-chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .alinx-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .alinx-msg.bot {
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--text-main);
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 2px;
+        }
+
+        .alinx-msg.user {
+            background: #0284c7;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .alinx-msg img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
+
+        .file-attachment-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85rem;
+        }
+
+        #file-preview-container {
+            display: none;
+            padding: 8px 15px;
+            background: rgba(15, 23, 42, 0.8);
+            border-top: 1px solid var(--border-color);
+            align-items: center;
+            gap: 10px;
+        }
+
+        #file-preview-container i.file-icon {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        #file-preview-container span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .remove-file-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .alinx-chat-input-area {
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .alinx-chat-input-area input[type="text"] {
+            flex-grow: 1;
+            background: rgba(7, 11, 25, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .alinx-chat-input-area input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .alinx-upload-label {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .alinx-upload-label:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        .alinx-send-btn {
+            background: var(--primary);
+            color: #070b19;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        .alinx-send-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Creative Wave Special Thanks Animation */
+        .special-thanks-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .special-thanks-text {
+            display: inline-block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: waveGradient 4s linear infinite, floatWaveText 2.5s ease-in-out infinite alternate;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        @keyframes waveGradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes floatWaveText {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-5px) rotate(1deg); }
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-policy-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .footer-policy-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-policy-links a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            .space-hero-title {
+                font-size: 1.7rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            #alinx-chat-box {
+                width: calc(100vw - 30px);
+                right: -10px;
+                height: 480px;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- 5-Second Cinematic Preloader Intro Overlay -->
+    <div id="website-preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h2>almpi.com.lk</h2>
+            <div class="preloader-subtitle" id="preloader-subtitle-text">Preparing Your Platform...</div>
+            <div class="preloader-spinner-bar">
+                <div class="preloader-spinner-progress" id="preloader-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+<div class="wrapper">
+    <!-- Top Navigation Bar -->
+    <nav class="site-nav">
+        <a href="#" class="nav-logo" onclick="goHome(event)"><i class="fa-solid fa-rocket" style="color: var(--primary);"></i> almpi<span>.com.lk</span></a>
+        <ul class="nav-links">
+            <li><a href="#" class="active" onclick="goHome(event)">Planets</a></li>
+            <li><a href="#app-container" onclick="scrollToSubjects(event)">Subjects</a></li>
+            <li><a href="#app-container" onclick="scrollToSubjects(event)">Packages</a></li>
+            <li><a href="#" onclick="openPolicyPage('terms', event)">Terms</a></li>
+            <li><a href="#" onclick="openPolicyPage('privacy', event)">Privacy</a></li>
+            <li><a href="#" onclick="openPolicyPage('returns', event)">Returns</a></li>
+        </ul>
+        <a href="#auth-modal" class="nav-email-btn" onclick="scrollToSubjects(event)">Portal Access</a>
+    </nav>
+
+    <header>
+        <h1>Welcome TO Almpi.com</h1>
+        <p id="header-subtitle">A/L Paper Skill Builder (AL Examination)</p>
+    </header>
+
+    <!-- Space-Themed Intro Hero Section -->
+    <div class="space-hero-intro" id="hero-intro-section">
+        <div class="space-hero-badge"><i class="fa-solid fa-rocket"></i> Cosmic Learning Universe</div>
+        <div class="space-hero-subtitle-top">The Blue Planet Skill Builder</div>
+        <h2 class="space-hero-title">Master Your A/L Exams in <span>Orbit</span></h2>
+        <p class="space-hero-desc">Explore this fascinating educational universe built for top-tier Advanced Level candidates. Access rigorous training packages, quality marking schemes, and step-by-step AI guidance.</p>
+        <div class="space-hero-actions">
+            <a href="#app-container" class="space-hero-btn" onclick="scrollToSubjects(event)">
+                <span>Get Started</span> <i class="fa-solid fa-arrow-down"></i>
+            </a>
+        </div>
+        <div class="space-hero-nav-pills">
+            <span class="space-pill" onclick="openSubject('maths')">&larr; Mathematics</span>
+            <span class="space-pill active" onclick="goHome(event)">Earth (Core Hub)</span>
+            <span class="space-pill" onclick="openSubject('physics')">Physics &rarr;</span>
+        </div>
+    </div>
+
+    <!-- Dynamic Session Status Bar -->
+    <div id="session-status-bar">
+        <div class="status-content" id="status-text-container"></div>
+        <button class="btn-logout" onclick="handleLogout()">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+    </div>
+
+    <!-- Initial Name & Email Form View -->
+    <div id="auth-modal">
+        <h2>Welcome Student</h2>
+        <p>Please enter your details to access the portal.</p>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" required placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" required placeholder="Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="Enter email address">
+            </div>
+            <button type="submit" class="btn-submit">Enter Portal</button>
+        </form>
+    </div>
+
+    <div id="app-container">
+        
+        <button class="nav-back" id="backBtn" onclick="goHome(event)">
+            <i class="fa-solid fa-arrow-left"></i> Back to Main Subjects
+        </button>
+
+        <div id="main-view" class="section-view active grid-container">
+            
+            <div class="card" onclick="openSubject('maths')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-square-root-variable"></i>
+                        </div>
+                        <h3>Combined Maths</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Subtopics & Lessons</div>
+                    <p class="description">Access integration, differentiation, trigonometry, mathematical induction, limits, binomial expansion, series, complex numbers, and modules graphs packages with quality marking schemes.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Lessons <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('physics')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <h3>Physics</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Subtopics & Lessons</div>
+                    <p class="description">Explore mechanics, optics, waves, magnetism, and heat training packages with quality marking schemes.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Lessons <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('chemistry')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
+                        <h3>Chemistry</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Subtopics & Lessons</div>
+                    <p class="description">Explore physical, organic, and inorganic chemistry training packages with quality marking schemes.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Lessons <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('biology')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-dna"></i>
+                        </div>
+                        <h3>Biology</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Subtopics & Lessons</div>
+                    <p class="description">Explore botany, zoology, genetics, and molecular biology training packages with quality marking schemes.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Lessons <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('ict')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3>ICT</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Subtopics & Lessons</div>
+                    <p class="description">Master database, networking, Python, PHP/HTML/CSS, operating systems, logic gates, number systems, and system development.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Lessons <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('notes')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-note-sticky"></i>
+                        </div>
+                        <h3>Notes</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-book-open"></i> Revision & Study Materials</div>
+                    <p class="description">Access short notes, concept summaries, formula sheets, and comprehensive theory breakdowns for A/L subjects.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Explore Notes <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="card" onclick="openSubject('feedback')">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h3>Student Feedback & Requests</h3>
+                    </div>
+                    <div class="feature-badge"><i class="fa-solid fa-pen-to-square"></i> Report Mistakes & Requests</div>
+                    <p class="description">Send us your feedback, report errors in questions or marking schemes, or request new features and study materials.</p>
+                </div>
+                <div style="color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    Open Feedback <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Terms & Conditions Page View -->
+        <div id="terms-view" class="section-view" style="grid-template-columns: 1fr;">
+            <div class="policy-container">
+                <h2><i class="fa-solid fa-file-contract"></i> Terms & Conditions</h2>
+                <p>Welcome to almpi.com.lk. By accessing and using our A/L Paper Skill Builder platform, you agree to comply with and be bound by the following terms and conditions.</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By registering, logging in, or purchasing digital training packages on almpi.com.lk, you accept these terms in full. If you disagree with any part of these terms, please do not use our platform.</p>
+                
+                <h3>2. Digital Content & Intellectual Property</h3>
+                <p>All training papers, marking schemes, formulas, and revision notes provided on this platform are protected by copyright law and intellectual property rights. They are strictly for individual student study use and must not be redistributed, copied, resold, or published online without prior explicit written permission.</p>
+                
+                <h3>3. User Accounts & Access</h3>
+                <p>You agree to provide accurate and truthful information when logging into the portal. Access credentials and purchased digital downloads are for single-user access. Sharing account access with unauthorized parties may result in immediate suspension.</p>
+                
+                <h3>4. Payments & Transactions</h3>
+                <p>All secure online payments are processed via PayHere. Prices are listed in Sri Lankan Rupees (LKR). Once a payment is successfully verified and content is unlocked, access is granted for downloading the respective educational files.</p>
+            </div>
+        </div>
+
+        <!-- Privacy Policy Page View -->
+        <div id="privacy-view" class="section-view" style="grid-template-columns: 1fr;">
+            <div class="policy-container">
+                <h2><i class="fa-solid fa-shield-cat"></i> Privacy Policy</h2>
+                <p>At almpi.com.lk, your privacy is extremely important to us. This Privacy Policy outlines how we collect, use, and protect your personal information.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>When you access our student portal or submit inquiries, we may collect:</p>
+                <ul>
+                    <li>Your First Name and Last Name</li>
+                    <li>Email Address</li>
+                    <li>Student feedback messages or requests submitted through our feedback portal</li>
+                </ul>
+                
+                <h3>2. How We Use Your Information</h3>
+                <p>We use the collected information solely for student identification, granting access to purchased digital study packages, improving our A/L paper skill-building materials, and responding to feedback inquiries.</p>
+                
+                <h3>3. Data Security</h3>
+                <p>We implement robust security measures to keep your personal information safe. Financial transactions are securely processed through PayHere gateways, and we do not store your raw credit/debit card information on our servers.</p>
+            </div>
+        </div>
+
+        <!-- Return Policy Page View -->
+        <div id="returns-view" class="section-view" style="grid-template-columns: 1fr;">
+            <div class="policy-container">
+                <h2><i class="fa-solid fa-rotate-left"></i> Return & Refund Policy</h2>
+                <p>Thank you for shopping at almpi. We value your satisfaction and strive to provide you with the best online shopping experience possible. If, for any reason, you are not completely satisfied with your purchase, we are here to help.</p>
+
+                <h3>Returns</h3>
+                <p>We accept returns within 2 days from the date of purchase. To be eligible for a return, your item must be unused and in the same condition that you received it. It must also be in the original packaging.</p>
+
+                <h3>Refunds</h3>
+                <p>Once we receive your return and inspect the item, we will notify you of the status of your refund. If your return is approved, we will initiate a refund to your original method of payment. Please note that the refund amount will exclude any shipping charges incurred during the initial purchase.</p>
+
+                <h3>Exchanges</h3>
+                <p>If you would like to exchange your item for a different size, color, or style, please contact our customer support team within 2 days of receiving your order. We will provide you with further instructions on how to proceed with the exchange.</p>
+
+                <h3>Non-Returnable Items</h3>
+                <p>Certain items are non-returnable and non-refundable. These include:</p>
+                <ul>
+                    <li>Gift cards</li>
+                    <li>Downloadable software products</li>
+                    <li>Personalized or custom-made items</li>
+                    <li>Perishable goods</li>
+                </ul>
+
+                <h3>Damaged or Defective Items</h3>
+                <p>In the unfortunate event that your item arrives damaged or defective, please contact us immediately. We will arrange for a replacement or issue a refund, depending on your preference and product availability.</p>
+
+                <h3>Return Shipping</h3>
+                <p>You will be responsible for paying the shipping costs for returning your item unless the return is due to our error (e.g., wrong item shipped, defective product). In such cases, we will provide you with a prepaid shipping label.</p>
+
+                <h3>Processing Time</h3>
+                <p>Refunds and exchanges will be processed within 4 business days after we receive your returned item. Please note that it may take additional time for the refund to appear in your account, depending on your payment provider.</p>
+
+                <h3>Contact Us</h3>
+                <p>If you have any questions or concerns regarding our refund policy, please contact our customer support team. We are here to assist you and ensure your shopping experience with us is enjoyable and hassle-free.</p>
+            </div>
+        </div>
+
+        <div id="maths-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-integral"></i></div>
+                        <h3>Integration Training Package (40 Questions)</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Comprehensive calculus problem sets featuring 40 structured essay questions focusing on integration by parts, reduction formulas, and advanced definite integrals.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INT', 'Combined Maths - Integration 40 Questions PDF', 20.00, 'maths-int-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-int-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'AL_Combined_Maths_Integration_40_Questions.pdf', 'MATHS_INT')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Combined_Maths_Integration_Marking.pdf', 'MATHS_INT')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3>Differentiation Training Package (40 Questions)</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Comprehensive calculus problem sets featuring 40 structured essay questions focusing on advanced derivatives, chain rule applications, implicit differentiation, tangents, normals, and optimization problems.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_DIFF', 'Combined Maths - Differentiation 40 Questions PDF', 20.00, 'maths-diff-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-diff-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'combined_40_questions_differentiation_practice_paper.pdf', 'MATHS_DIFF')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Combined_Maths_Differentiation_Marking.pdf', 'MATHS_DIFF')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-wave-square"></i></div>
+                        <h3>Trigonometry Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Trigonometric identities, compound angles, equations, properties of triangles, and inverse trigonometric functions.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_TRIG', 'Combined Maths - Trigonometry PDF', 20.00, 'maths-trig-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-trig-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Trigonometry.pdf', 'MATHS_TRIG')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Trigonometry_Marking.pdf', 'MATHS_TRIG')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-list-check"></i></div>
+                        <h3>Mathematical Induction Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Rigorous problem sets for proving mathematical statements, summation formulas, divisibility properties, and inequality proofs using the principle of mathematical induction.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INDUCTION', 'Combined Maths - Mathematical Induction PDF', 20.00, 'maths-induction-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-induction-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'GCE_AL_Combined_Maths_Induction_40_Questions.pdf', 'MATHS_INDUCTION')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Mathematical_Induction_Marking.pdf', 'MATHS_INDUCTION')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+                        <h3>Limits Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Evaluating algebraic and trigonometric limits, standard forms, L'Hôpital's rule applications, and continuity principles.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_LIMITS', 'Combined Maths - Limits PDF', 20.00, 'maths-limits-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-limits-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'al_limits_questions.pdf', 'MATHS_LIMITS')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Limits_Marking.pdf', 'MATHS_LIMITS')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3>Binomial Expansion Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Binomial theorem for any rational index, expansions for negative and fractional indices, approximations, and general term evaluations.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_BINOMIAL', 'Combined Maths - Binomial Expansion PDF', 20.00, 'maths-binomial-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-binomial-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'al_binomial_expansion_questions.pdf', 'MATHS_BINOMIAL')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Binomial_Expansion_Marking.pdf', 'MATHS_BINOMIAL')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-list-ol"></i></div>
+                        <h3>Series Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Arithmetic and geometric progressions, binomial expansions, convergence tests, and summation of special series.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_SERIES', 'Combined Maths - Series PDF', 20.00, 'maths-series-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-series-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Series.pdf', 'MATHS_SERIES')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Series_Marking.pdf', 'MATHS_SERIES')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-calculator"></i></div>
+                        <h3>Complex Numbers Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Argand diagrams, modulus-argument forms, De Moivre's theorem, roots of unity, and locus problems.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_COMPLEX', 'Combined Maths - Complex Numbers PDF', 20.00, 'maths-complex-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-complex-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Complex_Numbers.pdf', 'MATHS_COMPLEX')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Complex_Numbers_Marking.pdf', 'MATHS_COMPLEX')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-chart-area"></i></div>
+                        <h3>Modules Graphs Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Sketching curves, transformations, modulus functions, asymptotes, and analyzing graph behaviors for A/L Combined Mathematics.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_GRAPHS', 'Combined Maths - Modules Graphs PDF', 20.00, 'maths-graphs-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="maths-graphs-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'advanced_math_50_questions.pdf', 'MATHS_GRAPHS')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'AL_Maths_Modules_Graphs_Marking.pdf', 'MATHS_GRAPHS')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="physics-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-gauge-high"></i></div>
+                        <h3>Mechanics Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Advanced particle dynamics, kinematics, and statics problem sets built for top-tier candidates.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_MECH', 'Physics - Mechanics PDF', 20.00, 'physics-mech-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="physics-mech-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Mechanics.pdf', 'PHYSICS_MECH')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Mechanics_Marking.pdf', 'PHYSICS_MECH')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-glasses"></i></div>
+                        <h3>Optics Training Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Ray optics, wave fronts, interference, and diffraction problem papers with complete solutions.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_OPTICS', 'Physics - Optics PDF', 20.00, 'physics-optics-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="physics-optics-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Optics.pdf', 'PHYSICS_OPTICS')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Optics_Marking.pdf', 'PHYSICS_OPTICS')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
+                        <h3>Electricity & Magnetism Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Current electricity, electromagnetic induction, magnetic fields, and AC circuits.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_ELEC', 'Physics - Electricity PDF', 20.00, 'physics-elec-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="physics-elec-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Electricity.pdf', 'PHYSICS_ELEC')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Physics_Electricity_Marking.pdf', 'PHYSICS_ELEC')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="chemistry-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                        <h3>Physical Chemistry Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Atomic structure, chemical bonding, energetics, equilibria, and electrochemistry problem sets.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_PHYSICAL', 'Chemistry - Physical PDF', 20.00, 'chem-phys-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="chem-phys-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Chemistry_Physical.pdf', 'CHEM_PHYSICAL')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Chemistry_Physical_Marking.pdf', 'CHEM_PHYSICAL')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-vial-circle-check"></i></div>
+                        <h3>Organic Chemistry Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Reaction mechanisms, name reactions, aliphatic & aromatic compounds, and synthesis pathways.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_ORGANIC', 'Chemistry - Organic PDF', 20.00, 'chem-org-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="chem-org-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Chemistry_Organic.pdf', 'CHEM_ORGANIC')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Chemistry_Organic_Marking.pdf', 'CHEM_ORGANIC')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="biology-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-seedling"></i></div>
+                        <h3>Biology Unit Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Cell biology, plant physiology, human physiology, genetics, and molecular biology structuring.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'BIO_UNIT', 'Biology - Units PDF', 20.00, 'bio-unit-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="bio-unit-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'Biology_Units.pdf', 'BIO_UNIT')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'Biology_Units_Marking.pdf', 'BIO_UNIT')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="ict-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                        <h3>ICT Programming & Database Package</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
+                    <p class="description">Python programming logic, SQL databases, normalization, web development (PHP/HTML/CSS), and networking.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'ICT_PKG', 'ICT - Programming & DB PDF', 20.00, 'ict-pkg-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="ict-pkg-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'ICT_Programming_DB.pdf', 'ICT_PKG')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Paper
+                            </a>
+                            <a href="#" onclick="triggerDownload(event, 'ICT_Programming_DB_Marking.pdf', 'ICT_PKG')" class="download-btn" style="background: #0284c7;">
+                                <i class="fa-solid fa-file-lines"></i> Download Marking
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="notes-view" class="section-view grid-container">
+            
+            <div class="card" style="cursor: default;">
+                <div>
+                    <div class="card-header">
+                        <div class="icon-box"><i class="fa-solid fa-book"></i></div>
+                        <h3>A/L Revision & Formula Notes</h3>
+                    </div>
+                    <div class="price-tag">20.00 LKR</div>
+                    <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> Comprehensive PDF Sheets</div>
+                    <p class="description">Quick formula recap sheets, short revision notes, and structure breakdown summaries across all major A/L streams.</p>
+                </div>
+                <div>
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'NOTES_ALL', 'AL Notes & Formulas PDF', 20.00, 'notes-all-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    </button>
+                    <div id="notes-all-section" class="locked-content">
+                        <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
+                        <p>Download your learning materials below:</p>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+                            <a href="#" onclick="triggerDownload(event, 'AL_Revision_Notes.pdf', 'NOTES_ALL')" class="download-btn">
+                                <i class="fa-solid fa-download"></i> Download Notes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="feedback-view" class="section-view" style="grid-template-columns: 1fr;">
+            <div class="card" style="cursor: default;">
+                <div class="card-header">
+                    <div class="icon-box"><i class="fa-solid fa-comments"></i></div>
+                    <h3 id="feedback-section-title">Student Feedback & Request Portal</h3>
+                </div>
+                <p class="description" id="feedback-section-desc">Found a mistake in a paper, need a specific marking scheme, or have a request? Let us know below.</p>
+                
+                <!-- Student Submission Form -->
+                <div id="student-feedback-form-container">
+                    <form onsubmit="submitStudentFeedback(event)">
+                        <div class="form-group">
+                            <label for="feedbackMessage">Your Message / Report / Request</label>
+                            <textarea id="feedbackMessage" rows="4" required placeholder="Describe the mistake, request, or comment here..." style="width: 100%; padding: 12px 15px; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-family: 'Poppins', sans-serif; font-size: 1rem; outline: none; resize: vertical;"></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Submit Feedback</button>
+                    </form>
+                </div>
+
+                <!-- Admin Table View (Visible only to Admin) -->
+                <div id="admin-feedback-table-container" style="display: none; margin-top: 20px;">
+                    <h4 style="color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-shield-halved"></i> Submitted Student Feedback (Admin View)</h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                                    <th style="padding: 10px;">Student Email</th>
+                                    <th style="padding: 10px;">Message / Request</th>
+                                    <th style="padding: 10px;">Date / Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminFeedbackTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Alinx AI Assistant Widget with File & Image Upload / Paste Support -->
+<div id="alinx-widget-container">
+    <div class="alinx-maintenance-banner">
+        <i class="fa-solid fa-triangle-exclamation"></i> This AI is under maintenance
+    </div>
+
+    <div id="alinx-chat-box">
+        <div class="alinx-chat-header">
+            <div class="alinx-header-info">
+                <div class="alinx-avatar">Ax</div>
+                <div class="alinx-title">
+                    <h4>Alinx AI</h4>
+                    <span><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Online for Mathematics & Physics</span>
+                </div>
+            </div>
+            <button class="alinx-close-btn" onclick="toggleAlinxChat()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="alinx-chat-messages" id="alinxMessages">
+            <div class="alinx-msg bot">Hello! I am <strong>Alinx</strong>, your personal AI assistant. You can type, paste/upload images, or attach any document files to solve questions step-by-step!</div>
+        </div>
+
+        <div id="file-preview-container">
+            <i class="fa-solid fa-file file-icon" id="previewFileIcon"></i>
+            <span id="previewFileName">file.pdf</span>
+            <button class="remove-file-btn" onclick="clearSelectedFile()" title="Remove File"><i class="fa-solid fa-trash"></i></button>
+        </div>
+
+        <div class="alinx-chat-input-area">
+            <input type="file" id="alinxFileInput" style="display: none;" onchange="handleFileSelection(event)">
+            <label for="alinxFileInput" class="alinx-upload-label" title="Attach any file or image">
+                <i class="fa-solid fa-paperclip"></i>
+            </label>
+            <input type="text" id="alinxInput" placeholder="Ask Alinx, paste, or attach a file..." onkeypress="handleAlinxKeyPress(event)" onpaste="handlePasteEvent(event)">
+            <button class="alinx-send-btn" onclick="sendAlinxMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <button id="alinx-toggle-btn" onclick="toggleAlinxChat()" title="Chat with Alinx AI">
+        <i class="fa-solid fa-robot"></i>
+    </button>
+</div>
+
+<!-- Special Thanks with Creative Wave -->
+<div class="special-thanks-container">
+    <div class="special-thanks-text">✨ Special thanks for Kalu ✨</div>
+</div>
+
+<footer>
+    <p>&copy; 2026 almpi.com.lk &bull; Advanced Level Skill Builder Platform. All Rights Reserved.</p>
+    <div class="footer-policy-links">
+        <a onclick="openPolicyPage('terms', event)">Terms & Conditions</a> &bull;
+        <a onclick="openPolicyPage('privacy', event)">Privacy Policy</a> &bull;
+        <a onclick="openPolicyPage('returns', event)">Return Policy</a>
+    </div>
+</footer>
+
+<script>
+    // Security Helper: Basic HTML escaping to prevent XSS injection
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)
+        );
+    }
+
+    // 5-Second Timed Cinematic Preloader Intro Sequence Logic
+    window.addEventListener('load', function() {
+        const preloader = document.getElementById('website-preloader');
+        const subtitleElem = document.getElementById('preloader-subtitle-text');
+        const progressBar = document.getElementById('preloader-progress-bar');
+
+        const introSteps = [
+            { time: 0, progress: 10, text: "Loading almpi.com.lk..." },
+            { time: 1500, progress: 40, text: "Setting up A/L Paper Skill Builder..." },
+            { time: 3000, progress: 75, text: "Connecting AI tools & marking schemes..." },
+            { time: 4500, progress: 100, text: "Platform Ready!" }
+        ];
+
+        introSteps.forEach(step => {
+            setTimeout(() => {
+                if(subtitleElem) subtitleElem.innerText = step.text;
+                if(progressBar) progressBar.style.width = step.progress + '%';
+            }, step.time);
+        });
+
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+        }, 5000);
+    });
+
+    function scrollToSubjects(e) {
+        e.preventDefault();
+        const container = document.getElementById('auth-modal');
+        container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    let currentUser = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        isAdmin: false
+    };
+
+    let unlockedItems = {};
+    let selectedFileData = null;
+
+    // Updated handleLogin function without backend dependency
+    function handleLogin(event) {
+        event.preventDefault(); // Stop page from reloading
+
+        const firstName = escapeHTML(document.getElementById('firstName').value.trim());
+        const lastName = escapeHTML(document.getElementById('lastName').value.trim());
+        const cleanEmail = escapeHTML(document.getElementById('email').value.trim().toLowerCase());
+
+        // Set current user details directly on frontend
+        currentUser.firstName = firstName;
+        currentUser.lastName = lastName;
+        currentUser.email = cleanEmail;
+        currentUser.isAdmin = (cleanEmail === 'randulamihiraj@gmail.com');
+
+        document.getElementById('auth-modal').style.display = 'none';
+        document.getElementById('app-container').style.display = 'block';
+
+        const statusBar = document.getElementById('session-status-bar');
+        const statusTextContainer = document.getElementById('status-text-container');
+        statusBar.style.display = 'flex';
+
+        if (currentUser.isAdmin) {
+            statusBar.className = 'admin-view-bar';
+            statusTextContainer.innerHTML = `<i class="fa-solid fa-shield-halved"></i> <span>Logged in as <strong>Admin View</strong> (${currentUser.email})</span>`;
+            applyAdminView();
+        } else {
+            statusBar.className = 'customer-view-bar';
+            statusTextContainer.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>You have logged in: <strong>Customer View</strong> (${currentUser.firstName} ${currentUser.lastName})</span>`;
+        }
+    }
+
+    function handleLogout() {
+        currentUser = { firstName: '', lastName: '', email: '', isAdmin: false };
+        unlockedItems = {};
+        clearSelectedFile();
+
+        document.getElementById('session-status-bar').style.display = 'none';
+        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('auth-modal').style.display = 'block';
+        document.getElementById('loginForm').reset();
+        goHome();
+
+        const lockedContents = document.querySelectorAll('.locked-content');
+        lockedContents.forEach(section => {
+            section.style.display = 'none';
+            const h4 = section.querySelector('h4');
+            if(h4) {
+                h4.innerHTML = `<i class="fa-solid fa-circle-check"></i> Unlocked Successfully!`;
+            }
+        });
+
+        const payButtons = document.querySelectorAll('.payment-action-btn');
+        payButtons.forEach(btn => {
+            btn.style.display = 'flex';
+        });
+
+        document.getElementById('header-subtitle').innerText = 'A/L Paper Skill Builder (2026 Examination)';
+    }
+
+    function applyAdminView() {
+        document.getElementById('header-subtitle').innerText = `A/L Paper Skill Builder - Admin Mode (${currentUser.email})`;
+        
+        const lockedContents = document.querySelectorAll('.locked-content');
+        lockedContents.forEach(section => {
+            section.style.display = 'block';
+            const h4 = section.querySelector('h4');
+            if(h4) {
+                h4.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Admin Free Access View`;
+            }
+        });
+
+        const payButtons = document.querySelectorAll('.payment-action-btn');
+        payButtons.forEach(btn => {
+            btn.style.display = 'none';
+        });
+
+        document.getElementById('admin-feedback-table-container').style.display = 'block';
+        document.getElementById('student-feedback-form-container').style.display = 'none';
+        renderAdminFeedbacks();
+    }
+
+    function openSubject(subject) {
+        document.getElementById('main-view').classList.remove('active');
+        document.getElementById('hero-intro-section').style.display = 'none';
+        
+        const views = document.querySelectorAll('.section-view');
+        views.forEach(v => v.classList.remove('active'));
+
+        const targetView = document.getElementById(subject + '-view');
+        if (targetView) {
+            targetView.classList.add('active');
+        }
+
+        document.getElementById('backBtn').style.display = 'flex';
+        
+        const titles = {
+            'maths': 'Combined Maths Training Packages',
+            'physics': 'Physics Training Packages',
+            'chemistry': 'Chemistry Training Packages',
+            'biology': 'Biology Training Packages',
+            'ict': 'ICT Training Packages',
+            'notes': 'Revision & Study Notes',
+            'feedback': 'Student Feedback Portal'
+        };
+
+        if (subject === 'feedback' && currentUser.isAdmin) {
+            renderAdminFeedbacks();
+        }
+
+        if (!currentUser.isAdmin) {
+            document.getElementById('header-subtitle').innerText = titles[subject] || 'A/L Paper Skill Builder';
+        }
+    }
+
+    function openPolicyPage(policyType, event) {
+        if(event) event.preventDefault();
+        
+        document.getElementById('main-view').classList.remove('active');
+        document.getElementById('hero-intro-section').style.display = 'none';
+        
+        const views = document.querySelectorAll('.section-view');
+        views.forEach(v => v.classList.remove('active'));
+
+        const targetView = document.getElementById(policyType + '-view');
+        if (targetView) {
+            targetView.classList.add('active');
+        }
+
+        document.getElementById('backBtn').style.display = 'flex';
+
+        const policyTitles = {
+            'terms': 'Terms & Conditions',
+            'privacy': 'Privacy Policy',
+            'returns': 'Return & Refund Policy'
+        };
+
+        document.getElementById('header-subtitle').innerText = policyTitles[policyType] || 'Platform Policy';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goHome(event) {
+        if(event) event.preventDefault();
+        
+        const views = document.querySelectorAll('.section-view');
+        views.forEach(v => v.classList.remove('active'));
+
+        document.getElementById('main-view').classList.add('active');
+        document.getElementById('hero-intro-section').style.display = 'block';
+        document.getElementById('backBtn').style.display = 'none';
+        
+        if (!currentUser.isAdmin) {
+            document.getElementById('header-subtitle').innerText = 'A/L Paper Skill Builder (2026 Examination)';
+        } else {
+            document.getElementById('header-subtitle').innerText = `A/L Paper Skill Builder - Admin Mode (${currentUser.email})`;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function triggerDownload(event, fileName, itemCode) {
+        event.preventDefault();
+        
+        if (currentUser.isAdmin || unlockedItems[itemCode]) {
+            const a = document.createElement('a');
+            a.href = fileName;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } else {
+            alert("Payment required! You must complete the payment to unlock and download this lesson's PDF.");
+        }
+    }
+
+    function startCheckout(event, itemCode, itemName, amount, sectionId) {
+        const clickedButton = event.target.closest('button');
+
+        payhere.onCompleted = function onCompleted(orderId) {
+            unlockedItems[itemCode] = true;
+            document.getElementById(sectionId).style.display = 'block';
+            if (clickedButton) clickedButton.style.display = 'none';
+        };
+
+        payhere.onDismissed = function onDismissed() {};
+        payhere.onError = function onError(error) {
+            alert("Payment error occurred. Please try again.");
+        };
+
+        var payment = {
+            "sandbox": true,
+            "merchant_id": "YOUR_MERCHANT_ID",
+            "return_url": undefined,
+            "cancel_url": undefined,
+            "notify_url": "https://almpi.com.lk/notify",
+            "order_id": itemCode + "_" + Date.now(),
+            "items": itemName,
+            "amount": amount.toFixed(2),
+            "currency": "LKR",
+            "hash": "", 
+            "first_name": currentUser.firstName || "Student",
+            "last_name": currentUser.lastName || "User",
+            "email": currentUser.email || "student@almpi.com.lk",
+            "phone": "0771234567",
+            "address": "Sri Lanka",
+            "city": "Colombo",
+            "country": "Sri Lanka"
+        };
+
+        payhere.startPayment(payment);
+    }
+
+    function submitStudentFeedback(event) {
+        event.preventDefault();
+        const msgInput = document.getElementById('feedbackMessage');
+        const message = escapeHTML(msgInput.value.trim());
+        if (!message) return;
+
+        let feedbacks = JSON.parse(localStorage.getItem('almpi_feedbacks') || '[]');
+        feedbacks.push({
+            email: currentUser.email || 'anonymous@student.com',
+            message: message,
+            date: new Date().toLocaleString()
+        });
+        localStorage.setItem('almpi_feedbacks', JSON.stringify(feedbacks));
+
+        msgInput.value = '';
+        alert('Thank you! Your feedback has been successfully submitted.');
+
+        if (currentUser.isAdmin) {
+            renderAdminFeedbacks();
+        }
+    }
+
+    function renderAdminFeedbacks() {
+        const tableBody = document.getElementById('adminFeedbackTableBody');
+        if (!tableBody) return;
+
+        let feedbacks = JSON.parse(localStorage.getItem('almpi_feedbacks') || '[]');
+        if (feedbacks.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="3" style="padding: 15px; text-align: center; color: var(--text-muted);">No feedback messages received yet.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = feedbacks.slice().reverse().map(item => `
+            <tr style="border-bottom: 1px solid rgba(56, 189, 248, 0.1);">
+                <td style="padding: 12px; color: var(--primary); font-weight: 500;">${item.email}</td>
+                <td style="padding: 12px; color: var(--text-main);">${item.message}</td>
+                <td style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">${item.date}</td>
+            </tr>
+        `).join('');
+    }
+
+    function toggleAlinxChat() {
+        const chatBox = document.getElementById('alinx-chat-box');
+        if (chatBox.style.display === 'flex') {
+            chatBox.style.display = 'none';
+        } else {
+            chatBox.style.display = 'flex';
+            document.getElementById('alinxInput').focus();
+        }
+    }
+
+    function handleFileSelection(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        processFileObject(file);
+    }
+
+    function processFileObject(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            selectedFileData = {
+                base64: e.target.result,
+                name: file.name,
+                type: file.type
+            };
+
+            document.getElementById('previewFileName').innerText = file.name;
+            const iconElem = document.getElementById('previewFileIcon');
+            
+            if (file.type.startsWith('image/')) {
+                iconElem.className = "fa-solid fa-image file-icon";
+            } else {
+                iconElem.className = "fa-solid fa-file file-icon";
+            }
+            document.getElementById('file-preview-container').style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function clearSelectedFile() {
+        selectedFileData = null;
+        document.getElementById('file-preview-container').style.display = 'none';
+        document.getElementById('alinxFileInput').value = '';
+    }
+
+    function handleAlinxKeyPress(e) {
+        if (e.key === 'Enter') {
+            sendAlinxMessage();
+        }
+    }
+
+    function handlePasteEvent(e) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let item of items) {
+            if (item.type.indexOf('image') === 0) {
+                const blob = item.getAsFile();
+                processFileObject(blob);
+                break;
+            }
+        }
+    }
+
+    function sendAlinxMessage() {
+        const inputElem = document.getElementById('alinxInput');
+        const text = inputElem.value.trim();
+        if (!text && !selectedFileData) return;
+
+        const messagesContainer = document.getElementById('alinxMessages');
+
+        let userMsgDiv = document.createElement('div');
+        userMsgDiv.className = 'alinx-msg user';
+        
+        let msgHtml = escapeHTML(text);
+        if (selectedFileData) {
+            if (selectedFileData.type.startsWith('image/')) {
+                msgHtml += `<br><img src="${selectedFileData.base64}" alt="Uploaded Image">`;
+            } else {
+                msgHtml += `<div class="file-attachment-badge"><i class="fa-solid fa-file"></i> <span>${selectedFileData.name}</span></div>`;
+            }
+        }
+        userMsgDiv.innerHTML = msgHtml;
+        messagesContainer.appendChild(userMsgDiv);
+
+        inputElem.value = '';
+        clearSelectedFile();
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        setTimeout(() => {
+            let botMsgDiv = document.createElement('div');
+            botMsgDiv.className = 'alinx-msg bot';
+            botMsgDiv.innerHTML = `I have received your message and file inquiry! However, Alinx AI is currently under maintenance. Please check back later or use our student feedback portal for urgent requests.`;
+            messagesContainer.appendChild(botMsgDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 1000);
+    }
+</script>
+</body>
+</html>
