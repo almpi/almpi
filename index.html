@@ -1050,38 +1050,6 @@
             background: var(--primary-hover);
         }
 
-        /* Creative Wave Special Thanks Animation */
-        .special-thanks-container {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .special-thanks-text {
-            display: inline-block;
-            font-size: 1.1rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc, #38bdf8);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: waveGradient 4s linear infinite, floatWaveText 2.5s ease-in-out infinite alternate;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
-        }
-
-        @keyframes waveGradient {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes floatWaveText {
-            0% { transform: translateY(0px) rotate(0deg); }
-            100% { transform: translateY(-5px) rotate(1deg); }
-        }
-
         footer {
             text-align: center;
             color: var(--text-muted);
@@ -1160,11 +1128,11 @@
         <a href="#" class="nav-logo" onclick="goHome(event)"><i class="fa-solid fa-rocket" style="color: var(--primary);"></i> almpi<span>.com.lk</span></a>
         <ul class="nav-links">
             <li><a href="#" class="active" onclick="goHome(event)">Planets</a></li>
-            <li><a href="#app-container" onclick="scrollToSubjects(event)">Subjects</a></li>
-            <li><a href="#app-container" onclick="scrollToSubjects(event)">Packages</a></li>
-            <li><a href="#" onclick="openPolicyPage('terms', event)">Terms</a></li>
-            <li><a href="#" onclick="openPolicyPage('privacy', event)">Privacy</a></li>
-            <li><a href="#" onclick="openPolicyPage('returns', event)">Returns</a></li>
+            <li><a href="#subjects" onclick="scrollToSubjects(event)">Subjects</a></li>
+            <li><a href="#subjects" onclick="scrollToSubjects(event)">Packages</a></li>
+            <li><a href="#terms" onclick="openPolicyPage('terms', event)">Terms</a></li>
+            <li><a href="#privacy" onclick="openPolicyPage('privacy', event)">Privacy</a></li>
+            <li><a href="#returns" onclick="openPolicyPage('returns', event)">Returns</a></li>
         </ul>
         <a href="#auth-modal" class="nav-email-btn" onclick="scrollToSubjects(event)">Portal Access</a>
     </nav>
@@ -1181,7 +1149,7 @@
         <h2 class="space-hero-title">Master Your A/L Exams in <span>Orbit</span></h2>
         <p class="space-hero-desc">Explore this fascinating educational universe built for top-tier Advanced Level candidates. Access rigorous training packages, quality marking schemes, and step-by-step AI guidance.</p>
         <div class="space-hero-actions">
-            <a href="#app-container" class="space-hero-btn" onclick="scrollToSubjects(event)">
+            <a href="#auth-modal" class="space-hero-btn" onclick="scrollToSubjects(event)">
                 <span>Get Started</span> <i class="fa-solid fa-arrow-down"></i>
             </a>
         </div>
@@ -2028,9 +1996,6 @@
     </button>
 </div>
 
-<!-- Special Thanks with Creative Wave -->
-
-
 <footer>
     <p>&copy; 2026 almpi.com.lk &bull; Advanced Level Skill Builder Platform. All Rights Reserved.</p>
     <div class="footer-policy-links">
@@ -2071,7 +2036,50 @@
         setTimeout(() => {
             preloader.classList.add('fade-out');
         }, 5000);
+
+        // Check initial URL hash on load
+        handleRoutingFromHash();
     });
+
+    // Listen to browser back/forward navigation buttons
+    window.addEventListener('popstate', function() {
+        handleRoutingFromHash();
+    });
+
+    function handleRoutingFromHash() {
+        const hash = window.location.hash.replace('#', '');
+        
+        // If logged in, ensure app container is visible
+        if (currentUser.firstName || currentUser.isAdmin) {
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            document.getElementById('session-status-bar').style.display = 'flex';
+        }
+
+        if (!hash || hash === 'home' || hash === 'subjects') {
+            if (!currentUser.firstName && !currentUser.isAdmin) {
+                goHome();
+            } else {
+                goHome();
+            }
+        } else if (hash === 'terms' || hash === 'privacy' || hash === 'returns') {
+            if (currentUser.firstName || currentUser.isAdmin) {
+                openPolicyPage(hash, null);
+            } else {
+                goHome();
+            }
+        } else {
+            // Assume it's a subject view like maths, physics, chemistry, biology, ict, notes, feedback
+            const validViews = ['maths', 'physics', 'chemistry', 'biology', 'ict', 'notes', 'feedback'];
+            if (validViews.includes(hash)) {
+                if (currentUser.firstName || currentUser.isAdmin) {
+                    openSubject(hash, null);
+                } else {
+                    goHome();
+                }
+            }
+        }
+    }
 
     function scrollToSubjects(e) {
         e.preventDefault();
@@ -2089,15 +2097,13 @@
     let unlockedItems = {};
     let selectedFileData = null;
 
-    // Updated handleLogin function without backend dependency
     function handleLogin(event) {
-        event.preventDefault(); // Stop page from reloading
+        event.preventDefault();
 
         const firstName = escapeHTML(document.getElementById('firstName').value.trim());
         const lastName = escapeHTML(document.getElementById('lastName').value.trim());
         const cleanEmail = escapeHTML(document.getElementById('email').value.trim().toLowerCase());
 
-        // Set current user details directly on frontend
         currentUser.firstName = firstName;
         currentUser.lastName = lastName;
         currentUser.email = cleanEmail;
@@ -2118,6 +2124,8 @@
             statusBar.className = 'customer-view-bar';
             statusTextContainer.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>You have logged in: <strong>Customer View</strong> (${currentUser.firstName} ${currentUser.lastName})</span>`;
         }
+        
+        window.location.hash = '#subjects';
     }
 
     function handleLogout() {
@@ -2129,6 +2137,8 @@
         document.getElementById('app-container').style.display = 'none';
         document.getElementById('auth-modal').style.display = 'block';
         document.getElementById('loginForm').reset();
+        
+        window.location.hash = '#home';
         goHome();
 
         const lockedContents = document.querySelectorAll('.locked-content');
@@ -2170,7 +2180,12 @@
         renderAdminFeedbacks();
     }
 
-    function openSubject(subject) {
+    function openSubject(subject, event) {
+        if (event) event.preventDefault();
+
+        // Update URL hash dynamically
+        window.location.hash = '#' + subject;
+
         document.getElementById('main-view').classList.remove('active');
         document.getElementById('hero-intro-section').style.display = 'none';
         
@@ -2201,11 +2216,15 @@
         if (!currentUser.isAdmin) {
             document.getElementById('header-subtitle').innerText = titles[subject] || 'A/L Paper Skill Builder';
         }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openPolicyPage(policyType, event) {
-        if(event) event.preventDefault();
+        if (event) event.preventDefault();
         
+        // Update URL hash dynamically
+        window.location.hash = '#' + policyType;
+
         document.getElementById('main-view').classList.remove('active');
         document.getElementById('hero-intro-section').style.display = 'none';
         
@@ -2230,8 +2249,11 @@
     }
 
     function goHome(event) {
-        if(event) event.preventDefault();
+        if (event) event.preventDefault();
         
+        // Update URL hash dynamically
+        window.location.hash = '#home';
+
         const views = document.querySelectorAll('.section-view');
         views.forEach(v => v.classList.remove('active'));
 
@@ -2434,38 +2456,6 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 1000);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 </body>
 </html>
