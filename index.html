@@ -437,7 +437,13 @@
         #session-status-bar.admin-view-bar {
             background: rgba(120, 53, 15, 0.75);
             border: 1px solid #d97706;
-            color: #fcd34d;
+            color: fcd34d;
+        }
+
+        #session-status-bar.guest-view-bar {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
         }
 
         .status-content {
@@ -465,7 +471,7 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* Initial Login Form Styles */
+        /* Initial Auth & Guest Mode Selection Styles */
         #auth-modal {
             max-width: 450px;
             margin: 0 auto;
@@ -490,6 +496,30 @@
             font-size: 0.95rem;
             margin-bottom: 20px;
             text-align: center;
+        }
+
+        .auth-actions-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-tab-btn.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border-color: var(--primary);
         }
 
         .form-group {
@@ -537,6 +567,41 @@
 
         .btn-submit:hover {
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+        }
+
+        .guest-mode-card {
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px dashed rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .guest-mode-card p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .btn-guest {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            width: 100%;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-guest:hover {
+            background: rgba(56, 189, 248, 0.1);
         }
 
         /* Main App Container */
@@ -1164,14 +1229,20 @@
     <div id="session-status-bar">
         <div class="status-content" id="status-text-container"></div>
         <button class="btn-logout" onclick="handleLogout()">
-            <i class="fa-solid fa-right-from-bracket"></i> Logout
+            <i class="fa-solid fa-right-from-bracket"></i> Logout / Exit
         </button>
     </div>
 
-    <!-- Initial Name & Email Form View -->
+    <!-- Initial Name & Email Login / Guest Form View -->
     <div id="auth-modal">
-        <h2>Welcome Student</h2>
-        <p>Please enter your details to access the portal.</p>
+        <h2>Portal Access</h2>
+        <p>Login to unlock packages or enter as a Guest to inspect package prices.</p>
+        
+        <div class="auth-actions-row">
+            <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Student Login</button>
+            <button type="button" class="auth-tab-btn" id="tabGuestBtn" onclick="switchAuthTab('guest')">Guest Visitor</button>
+        </div>
+
         <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label for="firstName">First Name</label>
@@ -1185,8 +1256,17 @@
                 <label for="email">Email Address</label>
                 <input type="email" id="email" required placeholder="Enter email address">
             </div>
-            <button type="submit" class="btn-submit">Enter Portal</button>
+            <button type="submit" class="btn-submit">Enter Portal & Unlock Packages</button>
         </form>
+
+        <div id="guestPortalSection" style="display: none;">
+            <div class="guest-mode-card">
+                <p style="color: var(--text-muted);">As a Guest visitor, you can browse all subjects and view the exact prices for every training package before signing up.</p>
+                <button type="button" class="btn-guest" onclick="handleGuestEntry()">
+                    <i class="fa-solid fa-eye"></i> Enter as Guest & View Prices
+                </button>
+            </div>
+        </div>
     </div>
 
     <div id="app-container">
@@ -1315,19 +1395,22 @@
         <div id="terms-view" class="section-view" style="grid-template-columns: 1fr;">
             <div class="policy-container">
                 <h2><i class="fa-solid fa-file-contract"></i> Terms & Conditions</h2>
-                <p>Welcome to almpi.com.lk. By accessing and using our A/L Paper Skill Builder platform, you agree to comply with and be bound by the following terms and conditions.</p>
+                <p>Welcome to <strong>almpi.com.lk</strong>. By accessing and using our A/L Paper Skill Builder platform, you agree to comply with and be bound by the following terms and conditions of use.</p>
                 
                 <h3>1. Acceptance of Terms</h3>
-                <p>By registering, logging in, or purchasing digital training packages on almpi.com.lk, you accept these terms in full. If you disagree with any part of these terms, please do not use our platform.</p>
+                <p>By registering, logging in, or purchasing digital educational packages on almpi.com.lk, you acknowledge that you have read, understood, and agreed to these terms. If you do not agree with any part of these terms, please discontinue use of the platform immediately.</p>
                 
-                <h3>2. Digital Content & Intellectual Property</h3>
-                <p>All training papers, marking schemes, formulas, and revision notes provided on this platform are protected by copyright law and intellectual property rights. They are strictly for individual student study use and must not be redistributed, copied, resold, or published online without prior explicit written permission.</p>
+                <h3>2. Digital Content & Intellectual Property Rights</h3>
+                <p>All training papers, exam questions, marking schemes, formulas, and revision notes hosted on almpi.com.lk are protected by copyright laws and intellectual property regulations in Sri Lanka. These materials are strictly licensed for personal student study use only. Unauthorized copying, redistribution, resale, public sharing, or commercial republication of downloaded PDF files is strictly prohibited.</p>
                 
-                <h3>3. User Accounts & Access</h3>
-                <p>You agree to provide accurate and truthful information when logging into the portal. Access credentials and purchased digital downloads are for single-user access. Sharing account access with unauthorized parties may result in immediate suspension.</p>
+                <h3>3. User Accounts & Access Security</h3>
+                <p>Students are required to provide accurate registration details (Name and Email) to access portal features and unlock training packages. Account access credentials and unlocked download links are intended for single-user educational use. Sharing login access with unauthorized individuals may result in account termination.</p>
                 
-                <h3>4. Payments & Transactions</h3>
-                <p>All secure online payments are processed via PayHere. Prices are listed in Sri Lankan Rupees (LKR). Once a payment is successfully verified and content is unlocked, access is granted for downloading the respective educational files.</p>
+                <h3>4. Payments, Pricing & Delivery</h3>
+                <p>All digital product prices are listed in Sri Lankan Rupees (LKR) and processed securely through the <strong>PayHere</strong> payment gateway. Upon successful payment verification, instant access and secure download links for the respective study materials and marking schemes are unlocked directly within your student dashboard.</p>
+
+                <h3>5. Governing Law</h3>
+                <p>These terms and conditions are governed by and construed in accordance with the laws of the Democratic Socialist Republic of Sri Lanka. Any disputes arising in connection with these terms shall be subject to the exclusive jurisdiction of the courts of Sri Lanka.</p>
             </div>
         </div>
 
@@ -1335,21 +1418,29 @@
         <div id="privacy-view" class="section-view" style="grid-template-columns: 1fr;">
             <div class="policy-container">
                 <h2><i class="fa-solid fa-shield-cat"></i> Privacy Policy</h2>
-                <p>At almpi.com.lk, your privacy is extremely important to us. This Privacy Policy outlines how we collect, use, and protect your personal information.</p>
+                <p>At <strong>almpi.com.lk</strong>, we value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard information when you use our educational portal.</p>
                 
                 <h3>1. Information We Collect</h3>
-                <p>When you access our student portal or submit inquiries, we may collect:</p>
+                <p>When you register to access our student portal or submit inquiries, we collect:</p>
                 <ul>
-                    <li>Your First Name and Last Name</li>
-                    <li>Email Address</li>
-                    <li>Student feedback messages or requests submitted through our feedback portal</li>
+                    <li>Your First Name and Last Name for student identification.</li>
+                    <li>Your Email Address for account session management and purchase verification.</li>
+                    <li>Student feedback messages, error reports, or resource requests submitted through our feedback portal.</li>
                 </ul>
                 
                 <h3>2. How We Use Your Information</h3>
-                <p>We use the collected information solely for student identification, granting access to purchased digital study packages, improving our A/L paper skill-building materials, and responding to feedback inquiries.</p>
+                <p>Your information is used solely for the following purposes:</p>
+                <ul>
+                    <li>Verifying student access and managing unlocked digital paper packages.</li>
+                    <li>Processing secure transactions via PayHere.</li>
+                    <li>Improving our A/L paper skill-building curriculum and responding to student inquiries.</li>
+                </ul>
                 
-                <h3>3. Data Security</h3>
-                <p>We implement robust security measures to keep your personal information safe. Financial transactions are securely processed through PayHere gateways, and we do not store your raw credit/debit card information on our servers.</p>
+                <h3>3. Data Protection & Security</h3>
+                <p>We implement strict security protocols to maintain the safety of your personal information. All online financial transactions are processed securely through PayHere payment gateways; we do not store raw credit card or banking credentials on our servers.</p>
+
+                <h3>4. Contacting Us</h3>
+                <p>If you have any questions regarding this Privacy Policy, you can reach us via the student feedback portal or by email at support@almpi.com.lk.</p>
             </div>
         </div>
 
@@ -1357,37 +1448,23 @@
         <div id="returns-view" class="section-view" style="grid-template-columns: 1fr;">
             <div class="policy-container">
                 <h2><i class="fa-solid fa-rotate-left"></i> Return & Refund Policy</h2>
-                <p>Thank you for shopping at almpi. We value your satisfaction and strive to provide you with the best online shopping experience possible. If, for any reason, you are not completely satisfied with your purchase, we are here to help.</p>
+                <p>Thank you for choosing <strong>almpi.com.lk</strong> for your Advanced Level preparation. Please review our refund policy regarding digital educational content.</p>
 
-                <h3>Returns</h3>
-                <p>We accept returns within 2 days from the date of purchase. To be eligible for a return, your item must be unused and in the same condition that you received it. It must also be in the original packaging.</p>
+                <h3>1. Nature of Digital Goods</h3>
+                <p>All products sold on almpi.com.lk consist of immediate digital downloads (PDF training question papers, model answers, and marking schemes). Because digital goods can be instantly downloaded and viewed upon successful payment, all sales are generally final once the content has been unlocked.</p>
 
-                <h3>Refunds</h3>
-                <p>Once we receive your return and inspect the item, we will notify you of the status of your refund. If your return is approved, we will initiate a refund to your original method of payment. Please note that the refund amount will exclude any shipping charges incurred during the initial purchase.</p>
-
-                <h3>Exchanges</h3>
-                <p>If you would like to exchange your item for a different size, color, or style, please contact our customer support team within 2 days of receiving your order. We will provide you with further instructions on how to proceed with the exchange.</p>
-
-                <h3>Non-Returnable Items</h3>
-                <p>Certain items are non-returnable and non-refundable. These include:</p>
+                <h3>2. Eligibility for Refunds</h3>
+                <p>Refunds or transaction reversals are evaluated on a case-by-case basis under the following exceptional circumstances:</p>
                 <ul>
-                    <li>Gift cards</li>
-                    <li>Downloadable software products</li>
-                    <li>Personalized or custom-made items</li>
-                    <li>Perishable goods</li>
+                    <li><strong>Duplicate Charges:</strong> If your account was billed multiple times for the same transaction due to a payment gateway error.</li>
+                    <li><strong>Technical Delivery Failure:</strong> If a confirmed payment was successfully processed via PayHere but the digital content failed to unlock due to a proven platform error, and our support team is unable to resolve the download access within 48 hours.</li>
                 </ul>
 
-                <h3>Damaged or Defective Items</h3>
-                <p>In the unfortunate event that your item arrives damaged or defective, please contact us immediately. We will arrange for a replacement or issue a refund, depending on your preference and product availability.</p>
+                <h3>3. Refund Request Procedure</h3>
+                <p>To request a review for a transaction error, students must contact us within <strong>2 days</strong> of purchase via the Student Feedback & Request Portal or by emailing support@almpi.com.lk with your registered email address, transaction reference, and a description of the issue.</p>
 
-                <h3>Return Shipping</h3>
-                <p>You will be responsible for paying the shipping costs for returning your item unless the return is due to our error (e.g., wrong item shipped, defective product). In such cases, we will provide you with a prepaid shipping label.</p>
-
-                <h3>Processing Time</h3>
-                <p>Refunds and exchanges will be processed within 4 business days after we receive your returned item. Please note that it may take additional time for the refund to appear in your account, depending on your payment provider.</p>
-
-                <h3>Contact Us</h3>
-                <p>If you have any questions or concerns regarding our refund policy, please contact our customer support team. We are here to assist you and ensure your shopping experience with us is enjoyable and hassle-free.</p>
+                <h3>4. Processing Time & Method</h3>
+                <p>Approved refunds will be given to the payment-initiated media itself (e.g., the original card or bank account used during payment). Depending on your bank or card issuer, please allow 3 to 7 business days for the refunded amount to reflect in your account statement.</p>
             </div>
         </div>
 
@@ -1399,13 +1476,13 @@
                         <div class="icon-box"><i class="fa-solid fa-integral"></i></div>
                         <h3>Integration Training Package (40 Questions)</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Comprehensive calculus problem sets featuring 40 structured essay questions focusing on integration by parts, reduction formulas, and advanced definite integrals.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INT', 'Combined Maths - Integration 40 Questions PDF', 20.00, 'maths-int-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INT', 'Combined Maths - Integration 40 Questions PDF', 80.00, 'maths-int-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-int-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1428,13 +1505,13 @@
                         <div class="icon-box"><i class="fa-solid fa-chart-line"></i></div>
                         <h3>Differentiation Training Package (40 Questions)</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Comprehensive calculus problem sets featuring 40 structured essay questions focusing on advanced derivatives, chain rule applications, implicit differentiation, tangents, normals, and optimization problems.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_DIFF', 'Combined Maths - Differentiation 40 Questions PDF', 20.00, 'maths-diff-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_DIFF', 'Combined Maths - Differentiation 40 Questions PDF', 80.00, 'maths-diff-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-diff-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1457,13 +1534,13 @@
                         <div class="icon-box"><i class="fa-solid fa-wave-square"></i></div>
                         <h3>Trigonometry Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Trigonometric identities, compound angles, equations, properties of triangles, and inverse trigonometric functions.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_TRIG', 'Combined Maths - Trigonometry PDF', 20.00, 'maths-trig-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_TRIG', 'Combined Maths - Trigonometry PDF', 80.00, 'maths-trig-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-trig-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1486,13 +1563,13 @@
                         <div class="icon-box"><i class="fa-solid fa-list-check"></i></div>
                         <h3>Mathematical Induction Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Rigorous problem sets for proving mathematical statements, summation formulas, divisibility properties, and inequality proofs using the principle of mathematical induction.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INDUCTION', 'Combined Maths - Mathematical Induction PDF', 20.00, 'maths-induction-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_INDUCTION', 'Combined Maths - Mathematical Induction PDF', 80.00, 'maths-induction-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-induction-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1515,13 +1592,13 @@
                         <div class="icon-box"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
                         <h3>Limits Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Evaluating algebraic and trigonometric limits, standard forms, L'Hôpital's rule applications, and continuity principles.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_LIMITS', 'Combined Maths - Limits PDF', 20.00, 'maths-limits-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_LIMITS', 'Combined Maths - Limits PDF', 80.00, 'maths-limits-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-limits-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1544,13 +1621,13 @@
                         <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
                         <h3>Binomial Expansion Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Binomial theorem for any rational index, expansions for negative and fractional indices, approximations, and general term evaluations.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_BINOMIAL', 'Combined Maths - Binomial Expansion PDF', 20.00, 'maths-binomial-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_BINOMIAL', 'Combined Maths - Binomial Expansion PDF', 80.00, 'maths-binomial-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-binomial-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1573,13 +1650,13 @@
                         <div class="icon-box"><i class="fa-solid fa-list-ol"></i></div>
                         <h3>Series Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Arithmetic and geometric progressions, binomial expansions, convergence tests, and summation of special series.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_SERIES', 'Combined Maths - Series PDF', 20.00, 'maths-series-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_SERIES', 'Combined Maths - Series PDF', 80.00, 'maths-series-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-series-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1602,13 +1679,13 @@
                         <div class="icon-box"><i class="fa-solid fa-calculator"></i></div>
                         <h3>Complex Numbers Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Argand diagrams, modulus-argument forms, De Moivre's theorem, roots of unity, and locus problems.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_COMPLEX', 'Combined Maths - Complex Numbers PDF', 20.00, 'maths-complex-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_COMPLEX', 'Combined Maths - Complex Numbers PDF', 80.00, 'maths-complex-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-complex-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1631,13 +1708,13 @@
                         <div class="icon-box"><i class="fa-solid fa-chart-area"></i></div>
                         <h3>Modules Graphs Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Sketching curves, transformations, modulus functions, asymptotes, and analyzing graph behaviors for A/L Combined Mathematics.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_GRAPHS', 'Combined Maths - Modules Graphs PDF', 20.00, 'maths-graphs-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'MATHS_GRAPHS', 'Combined Maths - Modules Graphs PDF', 80.00, 'maths-graphs-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="maths-graphs-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1664,13 +1741,13 @@
                         <div class="icon-box"><i class="fa-solid fa-gauge-high"></i></div>
                         <h3>Mechanics Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Advanced particle dynamics, kinematics, and statics problem sets built for top-tier candidates.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_MECH', 'Physics - Mechanics PDF', 20.00, 'physics-mech-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_MECH', 'Physics - Mechanics PDF', 80.00, 'physics-mech-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="physics-mech-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1693,13 +1770,13 @@
                         <div class="icon-box"><i class="fa-solid fa-glasses"></i></div>
                         <h3>Optics Training Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Ray optics, wave fronts, interference, and diffraction problem papers with complete solutions.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_OPTICS', 'Physics - Optics PDF', 20.00, 'physics-optics-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_OPTICS', 'Physics - Optics PDF', 80.00, 'physics-optics-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="physics-optics-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1722,13 +1799,13 @@
                         <div class="icon-box"><i class="fa-solid fa-bolt"></i></div>
                         <h3>Electricity & Magnetism Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Current electricity, electromagnetic induction, magnetic fields, and AC circuits.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_ELEC', 'Physics - Electricity PDF', 20.00, 'physics-elec-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'PHYSICS_ELEC', 'Physics - Electricity PDF', 80.00, 'physics-elec-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="physics-elec-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1755,13 +1832,13 @@
                         <div class="icon-box"><i class="fa-solid fa-fire-flame-curved"></i></div>
                         <h3>Physical Chemistry Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Atomic structure, chemical bonding, energetics, equilibria, and electrochemistry problem sets.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_PHYSICAL', 'Chemistry - Physical PDF', 20.00, 'chem-phys-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_PHYSICAL', 'Chemistry - Physical PDF', 80.00, 'chem-phys-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="chem-phys-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1784,13 +1861,13 @@
                         <div class="icon-box"><i class="fa-solid fa-vial-circle-check"></i></div>
                         <h3>Organic Chemistry Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Reaction mechanisms, name reactions, aliphatic & aromatic compounds, and synthesis pathways.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_ORGANIC', 'Chemistry - Organic PDF', 20.00, 'chem-org-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'CHEM_ORGANIC', 'Chemistry - Organic PDF', 80.00, 'chem-org-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="chem-org-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1817,13 +1894,13 @@
                         <div class="icon-box"><i class="fa-solid fa-seedling"></i></div>
                         <h3>Biology Unit Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Cell biology, plant physiology, human physiology, genetics, and molecular biology structuring.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'BIO_UNIT', 'Biology - Units PDF', 20.00, 'bio-unit-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'BIO_UNIT', 'Biology - Units PDF', 80.00, 'bio-unit-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="bio-unit-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1850,13 +1927,13 @@
                         <div class="icon-box"><i class="fa-solid fa-code"></i></div>
                         <h3>ICT Programming & Database Package</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> With a quality marking scheme</div>
                     <p class="description">Python programming logic, SQL databases, normalization, web development (PHP/HTML/CSS), and networking.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'ICT_PKG', 'ICT - Programming & DB PDF', 20.00, 'ict-pkg-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'ICT_PKG', 'ICT - Programming & DB PDF', 80.00, 'ict-pkg-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="ict-pkg-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -1883,13 +1960,13 @@
                         <div class="icon-box"><i class="fa-solid fa-book"></i></div>
                         <h3>A/L Revision & Formula Notes</h3>
                     </div>
-                    <div class="price-tag">20.00 LKR</div>
+                    <div class="price-tag">80.00 LKR</div>
                     <div class="feature-badge"><i class="fa-solid fa-circle-check"></i> Comprehensive PDF Sheets</div>
                     <p class="description">Quick formula recap sheets, short revision notes, and structure breakdown summaries across all major A/L streams.</p>
                 </div>
                 <div>
-                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'NOTES_ALL', 'AL Notes & Formulas PDF', 20.00, 'notes-all-section')">
-                        <i class="fa-solid fa-lock"></i> Pay 20.00 LKR & Unlock Lesson
+                    <button class="btn-pay payment-action-btn" onclick="startCheckout(event, 'NOTES_ALL', 'AL Notes & Formulas PDF', 80.00, 'notes-all-section')">
+                        <i class="fa-solid fa-lock"></i> Pay 80.00 LKR & Unlock Lesson
                     </button>
                     <div id="notes-all-section" class="locked-content">
                         <h4><i class="fa-solid fa-circle-check"></i> Unlocked Successfully!</h4>
@@ -2037,330 +2114,326 @@
             preloader.classList.add('fade-out');
         }, 5000);
 
-        // Check initial URL hash on load
         handleRoutingFromHash();
     });
 
-    // Listen to browser back/forward navigation buttons
     window.addEventListener('popstate', function() {
         handleRoutingFromHash();
     });
 
     function handleRoutingFromHash() {
         const hash = window.location.hash.replace('#', '');
-        
-        // If logged in, ensure app container is visible
-        if (currentUser.firstName || currentUser.isAdmin) {
-            document.getElementById('auth-modal').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
-            document.getElementById('session-status-bar').style.display = 'flex';
+        if (hash === 'terms' || hash === 'privacy' || hash === 'returns') {
+            openPolicyPage(hash, null);
         }
+    }
 
-        if (!hash || hash === 'home' || hash === 'subjects') {
-            if (!currentUser.firstName && !currentUser.isAdmin) {
-                goHome();
-            } else {
-                goHome();
-            }
-        } else if (hash === 'terms' || hash === 'privacy' || hash === 'returns') {
-            if (currentUser.firstName || currentUser.isAdmin) {
-                openPolicyPage(hash, null);
-            } else {
-                goHome();
-            }
+    // Toggle between Student Login and Guest Visitor mode in Auth card
+    function switchAuthTab(mode) {
+        const loginBtn = document.getElementById('tabLoginBtn');
+        const guestBtn = document.getElementById('tabGuestBtn');
+        const loginForm = document.getElementById('loginForm');
+        const guestSection = document.getElementById('guestPortalSection');
+        const authModalTitle = document.querySelector('#auth-modal h2');
+        const authModalDesc = document.querySelector('#auth-modal p');
+
+        if (mode === 'login') {
+            loginBtn.classList.add('active');
+            guestBtn.classList.remove('active');
+            loginForm.style.display = 'block';
+            guestSection.style.display = 'none';
+            authModalTitle.innerText = "Portal Access";
+            authModalDesc.innerText = "Login to unlock packages or enter as a Guest to inspect package prices.";
         } else {
-            // Assume it's a subject view like maths, physics, chemistry, biology, ict, notes, feedback
-            const validViews = ['maths', 'physics', 'chemistry', 'biology', 'ict', 'notes', 'feedback'];
-            if (validViews.includes(hash)) {
-                if (currentUser.firstName || currentUser.isAdmin) {
-                    openSubject(hash, null);
-                } else {
-                    goHome();
-                }
-            }
+            guestBtn.classList.add('active');
+            loginBtn.classList.remove('active');
+            loginForm.style.display = 'none';
+            guestSection.style.display = 'block';
+            authModalTitle.innerText = "Guest Visitor Mode";
+            authModalDesc.innerText = "Browse all package prices freely without logging in.";
         }
     }
 
-    function scrollToSubjects(e) {
-        e.preventDefault();
-        const container = document.getElementById('auth-modal');
-        container.scrollIntoView({ behavior: 'smooth' });
+    // Handle Guest Visitor Entry
+    function handleGuestEntry() {
+        localStorage.setItem('almpi_session_type', 'guest');
+        localStorage.setItem('almpi_guest_name', 'Guest Visitor');
+        applySessionState();
     }
 
-    let currentUser = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        isAdmin: false
-    };
-
-    let unlockedItems = {};
-    let selectedFileData = null;
-
+    // Handle Student / Admin Login
     function handleLogin(event) {
         event.preventDefault();
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
 
-        const firstName = escapeHTML(document.getElementById('firstName').value.trim());
-        const lastName = escapeHTML(document.getElementById('lastName').value.trim());
-        const cleanEmail = escapeHTML(document.getElementById('email').value.trim().toLowerCase());
+        if (!firstName || !lastName || !email) return;
 
-        currentUser.firstName = firstName;
-        currentUser.lastName = lastName;
-        currentUser.email = cleanEmail;
-        currentUser.isAdmin = (cleanEmail === 'randulamihiraj@gmail.com');
+        localStorage.setItem('almpi_first_name', firstName);
+        localStorage.setItem('almpi_last_name', lastName);
+        localStorage.setItem('almpi_email', email);
+        localStorage.setItem('almpi_session_type', 'customer');
 
-        document.getElementById('auth-modal').style.display = 'none';
-        document.getElementById('app-container').style.display = 'block';
+        applySessionState();
+    }
 
+    // Check existing session on load
+    document.addEventListener('DOMContentLoaded', function() {
+        applySessionState();
+    });
+
+    function applySessionState() {
+        const sessionType = localStorage.getItem('almpi_session_type');
+        const authModal = document.getElementById('auth-modal');
+        const appContainer = document.getElementById('app-container');
         const statusBar = document.getElementById('session-status-bar');
         const statusTextContainer = document.getElementById('status-text-container');
-        statusBar.style.display = 'flex';
+        const heroIntro = document.getElementById('hero-intro-section');
 
-        if (currentUser.isAdmin) {
-            statusBar.className = 'admin-view-bar';
-            statusTextContainer.innerHTML = `<i class="fa-solid fa-shield-halved"></i> <span>Logged in as <strong>Admin View</strong> (${currentUser.email})</span>`;
-            applyAdminView();
+        if (sessionType === 'customer' || sessionType === 'admin' || sessionType === 'guest') {
+            authModal.style.display = 'none';
+            appContainer.style.display = 'block';
+            if(heroIntro) heroIntro.style.display = 'none';
+            statusBar.style.display = 'flex';
+
+            if (sessionType === 'guest') {
+                statusBar.className = "guest-view-bar";
+                statusTextContainer.innerHTML = `<i class="fa-solid fa-eye" style="color: var(--primary);"></i> Browsing as <strong>Guest Visitor</strong> &bull; Inspect package prices freely. (Login anytime to purchase)`;
+            } else if (sessionType === 'admin') {
+                statusBar.className = "admin-view-bar";
+                statusTextContainer.innerHTML = `<i class="fa-solid fa-shield-halved" style="color: #fcd34d;"></i> Logged in as <strong>Admin</strong> (${escapeHTML(localStorage.getItem('almpi_email') || '')})`;
+            } else {
+                statusBar.className = "customer-view-bar";
+                statusTextContainer.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #6ee7b7;"></i> Logged in as <strong>${escapeHTML(localStorage.getItem('almpi_first_name') || '')} ${escapeHTML(localStorage.getItem('almpi_last_name') || '')}</strong> (${escapeHTML(localStorage.getItem('almpi_email') || '')})`;
+            }
+
+            // Restore previously unlocked items if customer
+            if (sessionType === 'customer' || sessionType === 'admin') {
+                const unlocked = JSON.parse(localStorage.getItem('almpi_unlocked') || '[]');
+                unlocked.forEach(pkgId => {
+                    unlockPackageUI(pkgId);
+                });
+            }
         } else {
-            statusBar.className = 'customer-view-bar';
-            statusTextContainer.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>You have logged in: <strong>Customer View</strong> (${currentUser.firstName} ${currentUser.lastName})</span>`;
+            authModal.style.display = 'block';
+            appContainer.style.display = 'none';
+            if(heroIntro) heroIntro.style.display = 'block';
+            statusBar.style.display = 'none';
         }
-        
-        window.location.hash = '#subjects';
     }
 
     function handleLogout() {
-        currentUser = { firstName: '', lastName: '', email: '', isAdmin: false };
-        unlockedItems = {};
-        clearSelectedFile();
-
-        document.getElementById('session-status-bar').style.display = 'none';
-        document.getElementById('app-container').style.display = 'none';
-        document.getElementById('auth-modal').style.display = 'block';
-        document.getElementById('loginForm').reset();
-        
-        window.location.hash = '#home';
-        goHome();
-
-        const lockedContents = document.querySelectorAll('.locked-content');
-        lockedContents.forEach(section => {
-            section.style.display = 'none';
-            const h4 = section.querySelector('h4');
-            if(h4) {
-                h4.innerHTML = `<i class="fa-solid fa-circle-check"></i> Unlocked Successfully!`;
-            }
-        });
-
-        const payButtons = document.querySelectorAll('.payment-action-btn');
-        payButtons.forEach(btn => {
-            btn.style.display = 'flex';
-        });
-
-        document.getElementById('header-subtitle').innerText = 'A/L Paper Skill Builder (2026 Examination)';
+        localStorage.removeItem('almpi_session_type');
+        localStorage.removeItem('almpi_first_name');
+        localStorage.removeItem('almpi_last_name');
+        localStorage.removeItem('almpi_email');
+        window.location.reload();
     }
 
-    function applyAdminView() {
-        document.getElementById('header-subtitle').innerText = `A/L Paper Skill Builder - Admin Mode (${currentUser.email})`;
-        
-        const lockedContents = document.querySelectorAll('.locked-content');
-        lockedContents.forEach(section => {
-            section.style.display = 'block';
-            const h4 = section.querySelector('h4');
-            if(h4) {
-                h4.innerHTML = `<i class="fa-solid fa-shield-halved"></i> Admin Free Access View`;
-            }
-        });
-
-        const payButtons = document.querySelectorAll('.payment-action-btn');
-        payButtons.forEach(btn => {
-            btn.style.display = 'none';
-        });
-
-        document.getElementById('admin-feedback-table-container').style.display = 'block';
-        document.getElementById('student-feedback-form-container').style.display = 'none';
-        renderAdminFeedbacks();
+    // Navigation & Subject Views
+    function goHome(event) {
+        if(event) event.preventDefault();
+        document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+        document.getElementById('main-view').classList.add('active');
+        document.getElementById('backBtn').style.display = 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openSubject(subject, event) {
-        if (event) event.preventDefault();
-
-        // Update URL hash dynamically
-        window.location.hash = '#' + subject;
-
-        document.getElementById('main-view').classList.remove('active');
-        document.getElementById('hero-intro-section').style.display = 'none';
-        
-        const views = document.querySelectorAll('.section-view');
-        views.forEach(v => v.classList.remove('active'));
-
-        const targetView = document.getElementById(subject + '-view');
+    function openSubject(subjectName) {
+        document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+        const targetView = document.getElementById(subjectName + '-view');
         if (targetView) {
             targetView.classList.add('active');
-        }
+            document.getElementById('backBtn').style.display = 'flex';
 
-        document.getElementById('backBtn').style.display = 'flex';
-        
-        const titles = {
-            'maths': 'Combined Maths Training Packages',
-            'physics': 'Physics Training Packages',
-            'chemistry': 'Chemistry Training Packages',
-            'biology': 'Biology Training Packages',
-            'ict': 'ICT Training Packages',
-            'notes': 'Revision & Study Notes',
-            'feedback': 'Student Feedback Portal'
-        };
+            if (subjectName === 'feedback') {
+                const sessionType = localStorage.getItem('almpi_session_type');
+                if (sessionType === 'admin') {
+                    document.getElementById('feedback-section-title').innerText = "Admin Feedback Review Portal";
+                    document.getElementById('feedback-section-desc').innerText = "Review all reports, error notices, and resource requests submitted by students.";
+                    document.getElementById('student-feedback-form-container').style.display = 'none';
+                    document.getElementById('admin-feedback-table-container').style.display = 'block';
+                    loadAdminFeedbackTable();
+                } else {
+                    document.getElementById('feedback-section-title').innerText = "Student Feedback & Request Portal";
+                    document.getElementById('feedback-section-desc').innerText = "Found a mistake in a paper, need a specific marking scheme, or have a request? Let us know below.";
+                    document.getElementById('student-feedback-form-container').style.display = 'block';
+                    document.getElementById('admin-feedback-table-container').style.display = 'none';
+                }
+            }
 
-        if (subject === 'feedback' && currentUser.isAdmin) {
-            renderAdminFeedbacks();
+            window.scrollTo({ top: 200, behavior: 'smooth' });
         }
-
-        if (!currentUser.isAdmin) {
-            document.getElementById('header-subtitle').innerText = titles[subject] || 'A/L Paper Skill Builder';
-        }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openPolicyPage(policyType, event) {
-        if (event) event.preventDefault();
-        
-        // Update URL hash dynamically
-        window.location.hash = '#' + policyType;
+        if(event) event.preventDefault();
+        document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+        const viewElem = document.getElementById(policyType + '-view');
+        if (viewElem) {
+            viewElem.classList.add('active');
+            document.getElementById('backBtn').style.display = 'flex';
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        }
+    }
 
-        document.getElementById('main-view').classList.remove('active');
-        document.getElementById('hero-intro-section').style.display = 'none';
-        
-        const views = document.querySelectorAll('.section-view');
-        views.forEach(v => v.classList.remove('active'));
+    function scrollToSubjects(event) {
+        if(event) event.preventDefault();
+        const sessionType = localStorage.getItem('almpi_session_type');
+        if (!sessionType) {
+            window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
+        } else {
+            goHome(null);
+        }
+    }
 
-        const targetView = document.getElementById(policyType + '-view');
-        if (targetView) {
-            targetView.classList.add('active');
+    // PayHere Payment Integration
+    function startCheckout(event, itemId, itemDescription, amount, sectionId) {
+        const sessionType = localStorage.getItem('almpi_session_type');
+        
+        if (sessionType === 'guest') {
+            alert("You are currently browsing as a Guest Visitor. Please switch to Student Login to purchase and unlock packages!");
+            window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
+            return;
         }
 
-        document.getElementById('backBtn').style.display = 'flex';
+        const firstName = localStorage.getItem('almpi_first_name') || 'Student';
+        const lastName = localStorage.getItem('almpi_last_name') || 'User';
+        const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
 
-        const policyTitles = {
-            'terms': 'Terms & Conditions',
-            'privacy': 'Privacy Policy',
-            'returns': 'Return & Refund Policy'
+        // Payment setup object for PayHere
+        var payment = {
+            sandbox: true,
+            merchant_id: "228669",
+            return_url: undefined,
+            cancel_url: undefined,
+            notify_url: "https://sample.lk/notify",
+            order_id: "ALMPI_" + itemId + "_" + Date.now(),
+            items: itemDescription,
+            amount: amount.toFixed(2),
+            currency: "LKR",
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone: "0771234567",
+            address: "Kurunegala, Sri Lanka",
+            city: "Kurunegala",
+            country: "Sri Lanka",
+            delivery_address: "Kurunegala, Sri Lanka",
+            delivery_city: "Kurunegala",
+            delivery_country: "Sri Lanka",
+            custom_1: itemId,
+            custom_2: sectionId
         };
-
-        document.getElementById('header-subtitle').innerText = policyTitles[policyType] || 'Platform Policy';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function goHome(event) {
-        if (event) event.preventDefault();
-        
-        // Update URL hash dynamically
-        window.location.hash = '#home';
-
-        const views = document.querySelectorAll('.section-view');
-        views.forEach(v => v.classList.remove('active'));
-
-        document.getElementById('main-view').classList.add('active');
-        document.getElementById('hero-intro-section').style.display = 'block';
-        document.getElementById('backBtn').style.display = 'none';
-        
-        if (!currentUser.isAdmin) {
-            document.getElementById('header-subtitle').innerText = 'A/L Paper Skill Builder (2026 Examination)';
-        } else {
-            document.getElementById('header-subtitle').innerText = `A/L Paper Skill Builder - Admin Mode (${currentUser.email})`;
-        }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function triggerDownload(event, fileName, itemCode) {
-        event.preventDefault();
-        
-        if (currentUser.isAdmin || unlockedItems[itemCode]) {
-            const a = document.createElement('a');
-            a.href = fileName;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        } else {
-            alert("Payment required! You must complete the payment to unlock and download this lesson's PDF.");
-        }
-    }
-
-    function startCheckout(event, itemCode, itemName, amount, sectionId) {
-        const clickedButton = event.target.closest('button');
 
         payhere.onCompleted = function onCompleted(orderId) {
-            unlockedItems[itemCode] = true;
-            document.getElementById(sectionId).style.display = 'block';
-            if (clickedButton) clickedButton.style.display = 'none';
+            console.log("Payment completed. OrderID:" + orderId);
+            unlockPackageUI(itemId);
+            
+            // Save to unlocked storage
+            let unlocked = JSON.parse(localStorage.getItem('almpi_unlocked') || '[]');
+            if (!unlocked.includes(itemId)) {
+                unlocked.push(itemId);
+                localStorage.setItem('almpi_unlocked', JSON.stringify(unlocked));
+            }
+            alert("Payment successful! Your learning package is now unlocked.");
         };
 
-        payhere.onDismissed = function onDismissed() {};
+        payhere.onDismissed = function onDismissed() {
+            console.log("Payment dismissed");
+        };
+
         payhere.onError = function onError(error) {
-            alert("Payment error occurred. Please try again.");
-        };
-
-        var payment = {
-            "sandbox": true,
-            "merchant_id": "YOUR_MERCHANT_ID",
-            "return_url": undefined,
-            "cancel_url": undefined,
-            "notify_url": "https://almpi.com.lk/notify",
-            "order_id": itemCode + "_" + Date.now(),
-            "items": itemName,
-            "amount": amount.toFixed(2),
-            "currency": "LKR",
-            "hash": "", 
-            "first_name": currentUser.firstName || "Student",
-            "last_name": currentUser.lastName || "User",
-            "email": currentUser.email || "student@almpi.com.lk",
-            "phone": "0771234567",
-            "address": "Sri Lanka",
-            "city": "Colombo",
-            "country": "Sri Lanka"
+            console.log("Error:" + error);
+            // Fallback for simulation / sandbox testing if gateway popup encounters network blocks
+            if(confirm("PayHere sandbox notice: Simulate successful test payment for " + itemDescription + "?")) {
+                unlockPackageUI(itemId);
+                let unlocked = JSON.parse(localStorage.getItem('almpi_unlocked') || '[]');
+                if (!unlocked.includes(itemId)) {
+                    unlocked.push(itemId);
+                    localStorage.setItem('almpi_unlocked', JSON.stringify(unlocked));
+                }
+            }
         };
 
         payhere.startPayment(payment);
     }
 
+    function unlockPackageUI(itemId) {
+        // Find corresponding locked section and show download buttons
+        const cardButtons = document.querySelectorAll('.payment-action-btn');
+        cardButtons.forEach(btn => {
+            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(itemId)) {
+                btn.style.display = 'none';
+                const parentCard = btn.closest('div');
+                if (parentCard) {
+                    const lockedContent = parentCard.querySelector('.locked-content');
+                    if (lockedContent) lockedContent.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    function triggerDownload(event, fileName, itemId) {
+        event.preventDefault();
+        
+        // Generate simulated PDF blob download for student
+        const dummyContent = "almpi.com.lk - Official Training Material & Marking Scheme\nItem ID: " + itemId + "\nLicensed for student study use.";
+        const blob = new Blob([dummyContent], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Student Feedback Submission Handler
     function submitStudentFeedback(event) {
         event.preventDefault();
-        const msgInput = document.getElementById('feedbackMessage');
-        const message = escapeHTML(msgInput.value.trim());
-        if (!message) return;
+        const msg = document.getElementById('feedbackMessage').value.trim();
+        const email = localStorage.getItem('almpi_email') || 'guest@almpi.com.lk';
+
+        if (!msg) return;
 
         let feedbacks = JSON.parse(localStorage.getItem('almpi_feedbacks') || '[]');
-        feedbacks.push({
-            email: currentUser.email || 'anonymous@student.com',
-            message: message,
+        feedbacks.unshift({
+            email: email,
+            message: msg,
             date: new Date().toLocaleString()
         });
         localStorage.setItem('almpi_feedbacks', JSON.stringify(feedbacks));
 
-        msgInput.value = '';
-        alert('Thank you! Your feedback has been successfully submitted.');
-
-        if (currentUser.isAdmin) {
-            renderAdminFeedbacks();
-        }
+        alert("Thank you! Your feedback/report has been successfully submitted to the admin.");
+        document.getElementById('feedbackMessage').value = '';
     }
 
-    function renderAdminFeedbacks() {
-        const tableBody = document.getElementById('adminFeedbackTableBody');
-        if (!tableBody) return;
+    function loadAdminFeedbackTable() {
+        const tbody = document.getElementById('adminFeedbackTableBody');
+        if (!tbody) return;
 
         let feedbacks = JSON.parse(localStorage.getItem('almpi_feedbacks') || '[]');
         if (feedbacks.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="3" style="padding: 15px; text-align: center; color: var(--text-muted);">No feedback messages received yet.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" style="padding: 15px; text-align: center; color: var(--text-muted);">No student feedback reports submitted yet.</td></tr>`;
             return;
         }
 
-        tableBody.innerHTML = feedbacks.slice().reverse().map(item => `
-            <tr style="border-bottom: 1px solid rgba(56, 189, 248, 0.1);">
-                <td style="padding: 12px; color: var(--primary); font-weight: 500;">${item.email}</td>
-                <td style="padding: 12px; color: var(--text-main);">${item.message}</td>
-                <td style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">${item.date}</td>
-            </tr>
-        `).join('');
+        let html = '';
+        feedbacks.forEach(item => {
+            html += `<tr style="border-bottom: 1px solid rgba(56, 189, 248, 0.1);">
+                <td style="padding: 12px; color: var(--primary);">${escapeHTML(item.email)}</td>
+                <td style="padding: 12px; color: var(--text-main);">${escapeHTML(item.message)}</td>
+                <td style="padding: 12px; color: var(--text-muted); font-size: 0.85rem;">${escapeHTML(item.date)}</td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
     }
+
+    // Alinx AI Assistant Chat & File Attachment Logic
+    let selectedFile = null;
 
     function toggleAlinxChat() {
         const chatBox = document.getElementById('alinx-chat-box');
@@ -2374,88 +2447,75 @@
 
     function handleFileSelection(event) {
         const file = event.target.files[0];
-        if (!file) return;
-        processFileObject(file);
-    }
-
-    function processFileObject(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            selectedFileData = {
-                base64: e.target.result,
-                name: file.name,
-                type: file.type
-            };
-
+        if (file) {
+            selectedFile = file;
             document.getElementById('previewFileName').innerText = file.name;
-            const iconElem = document.getElementById('previewFileIcon');
-            
-            if (file.type.startsWith('image/')) {
-                iconElem.className = "fa-solid fa-image file-icon";
-            } else {
-                iconElem.className = "fa-solid fa-file file-icon";
-            }
             document.getElementById('file-preview-container').style.display = 'flex';
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function clearSelectedFile() {
-        selectedFileData = null;
-        document.getElementById('file-preview-container').style.display = 'none';
-        document.getElementById('alinxFileInput').value = '';
-    }
-
-    function handleAlinxKeyPress(e) {
-        if (e.key === 'Enter') {
-            sendAlinxMessage();
         }
     }
 
-    function handlePasteEvent(e) {
-        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    function clearSelectedFile() {
+        selectedFile = null;
+        document.getElementById('alinxFileInput').value = '';
+        document.getElementById('file-preview-container').style.display = 'none';
+    }
+
+    function handlePasteEvent(event) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
         for (let item of items) {
             if (item.type.indexOf('image') === 0) {
                 const blob = item.getAsFile();
-                processFileObject(blob);
+                selectedFile = blob;
+                selectedFile.name = "pasted_image_" + Date.now() + ".png";
+                document.getElementById('previewFileName').innerText = selectedFile.name;
+                document.getElementById('file-preview-container').style.display = 'flex';
+                event.preventDefault();
                 break;
             }
+        }
+    }
+
+    function handleAlinxKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendAlinxMessage();
         }
     }
 
     function sendAlinxMessage() {
         const inputElem = document.getElementById('alinxInput');
         const text = inputElem.value.trim();
-        if (!text && !selectedFileData) return;
-
         const messagesContainer = document.getElementById('alinxMessages');
 
-        let userMsgDiv = document.createElement('div');
-        userMsgDiv.className = 'alinx-msg user';
-        
-        let msgHtml = escapeHTML(text);
-        if (selectedFileData) {
-            if (selectedFileData.type.startsWith('image/')) {
-                msgHtml += `<br><img src="${selectedFileData.base64}" alt="Uploaded Image">`;
+        if (!text && !selectedFile) return;
+
+        // Append User Message
+        let userHtml = `<div class="alinx-msg user">${escapeHTML(text)}`;
+        if (selectedFile) {
+            if (selectedFile.type && selectedFile.type.startsWith('image/')) {
+                const imgUrl = URL.createObjectURL(selectedFile);
+                userHtml += `<br><img src="${imgUrl}" alt="Attached Image">`;
             } else {
-                msgHtml += `<div class="file-attachment-badge"><i class="fa-solid fa-file"></i> <span>${selectedFileData.name}</span></div>`;
+                userHtml += `<div class="file-attachment-badge"><i class="fa-solid fa-file"></i> <span>${escapeHTML(selectedFile.name)}</span></div>`;
             }
         }
-        userMsgDiv.innerHTML = msgHtml;
-        messagesContainer.appendChild(userMsgDiv);
+        userHtml += `</div>`;
+        messagesContainer.insertAdjacentHTML('beforeend', userHtml);
 
         inputElem.value = '';
+        const currentFile = selectedFile;
         clearSelectedFile();
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
+        // Simulated AI Response with maintenance notice & helpful guidance
         setTimeout(() => {
-            let botMsgDiv = document.createElement('div');
-            botMsgDiv.className = 'alinx-msg bot';
-            botMsgDiv.innerHTML = `I have received your message and file inquiry! However, Alinx AI is currently under maintenance. Please check back later or use our student feedback portal for urgent requests.`;
-            messagesContainer.appendChild(botMsgDiv);
+            let botReply = `I have received your query${currentFile ? ' along with the attached file/image' : ''}. Note that AI assistance is currently under maintenance, but I recommend checking our 40-question training packages for integration, differentiation, and mechanics with step-by-step marking schemes!`;
+            
+            const botHtml = `<div class="alinx-msg bot">${botReply}</div>`;
+            messagesContainer.insertAdjacentHTML('beforeend', botHtml);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 1000);
     }
 </script>
+
 </body>
 </html>
