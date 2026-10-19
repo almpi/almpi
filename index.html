@@ -2288,7 +2288,7 @@
         }
     }
 
-    // PayHere Payment Integration
+    // PayHere Payment Integration (Live Mode Active)
     function startCheckout(event, itemId, itemDescription, amount, sectionId) {
         const sessionType = localStorage.getItem('almpi_session_type');
         
@@ -2302,13 +2302,13 @@
         const lastName = localStorage.getItem('almpi_last_name') || 'User';
         const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
 
-        // Payment setup object for PayHere
+        // Payment setup object for PayHere (Live Mode: sandbox set to false)
         var payment = {
-            sandbox: true,
-            merchant_id: "228669",
+            sandbox: false, // 👈 Switched to Live Production Mode
+            merchant_id: "228669", // Replace with your live merchant ID if different
             return_url: undefined,
             cancel_url: undefined,
-            notify_url: "https://sample.lk/notify",
+            notify_url: "https://almpi.com.lk/notify",
             order_id: "ALMPI_" + itemId + "_" + Date.now(),
             items: itemDescription,
             amount: amount.toFixed(2),
@@ -2346,15 +2346,7 @@
 
         payhere.onError = function onError(error) {
             console.log("Error:" + error);
-            // Fallback for simulation / sandbox testing if gateway popup encounters network blocks
-            if(confirm("PayHere sandbox notice: Simulate successful test payment for " + itemDescription + "?")) {
-                unlockPackageUI(itemId);
-                let unlocked = JSON.parse(localStorage.getItem('almpi_unlocked') || '[]');
-                if (!unlocked.includes(itemId)) {
-                    unlocked.push(itemId);
-                    localStorage.setItem('almpi_unlocked', JSON.stringify(unlocked));
-                }
-            }
+            alert("Payment Error: " + error);
         };
 
         payhere.startPayment(payment);
