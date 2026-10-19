@@ -2289,30 +2289,43 @@
     }
 
     // PayHere Payment Integration (Live Mode Active)
-    function startCheckout(event, itemId, itemDescription, amount, sectionId) {
-        const sessionType = localStorage.getItem('almpi_session_type');
-        
-        if (sessionType === 'guest') {
-            alert("You are currently browsing as a Guest Visitor. Please switch to Student Login to purchase and unlock packages!");
-            window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
-            return;
-        }
+function startCheckout(event, itemId, itemDescription, amount, sectionId) {
+    const sessionType = localStorage.getItem('almpi_session_type');
 
-        const firstName = localStorage.getItem('almpi_first_name') || 'Student';
-        const lastName = localStorage.getItem('almpi_last_name') || 'User';
-        const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
+    if (sessionType === 'guest') {
+        alert("You are currently browsing as a Guest Visitor. Please switch to Student Login to purchase and unlock packages!");
+        window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
+        return;
+    }
 
+    const firstName = localStorage.getItem('almpi_first_name') || 'Student';
+    const lastName = localStorage.getItem('almpi_last_name') || 'User';
+    const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
+
+    // === ADD THESE LINES HERE SO ORDER ID AND HASH MATCH CORRECTLY ===
+    const merchantId = "235046";
+    const merchantSecret = "NDI3NzI4MzQzNjMxMzYyNjkxMjcxMDU1NjI=";
+    const orderId = "ALMPI_" + itemId + "_" + Date.now();
+    const formattedAmount = amount.toFixed(2);
+    const currency = "LKR";
+
+    // Generate MD5 Hash using md5 library
+    const hashedSecret = md5(merchantSecret).toUpperCase();
+    const hashValue = md5(merchantId + orderId + formattedAmount + currency + hashedSecret).toUpperCase();
+    // =================================================================
+	
         // Payment setup object for PayHere (Live Mode: sandbox set to false)
         var payment = {
             sandbox: false, // 👈 Switched to Live Production Mode
-            merchant_id: "228669", // Replace with your live merchant ID if different
-            return_url: undefined,
-            cancel_url: undefined,
+            merchant_id: "235046", // Replace with your live merchant ID if different
+            return_url: "https://almpi.com.lk",
+            cancel_url: "https://almpi.com.lk",
             notify_url: "https://almpi.com.lk/notify",
-            order_id: "ALMPI_" + itemId + "_" + Date.now(),
+            order_id: orderId,
             items: itemDescription,
-            amount: amount.toFixed(2),
+            amount: formattedAmount,
             currency: "LKR",
+			hash: hashValue,
             first_name: firstName,
             last_name: lastName,
             email: email,
