@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.payhere.lk https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.payhere.lk; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.payhere.lk https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://www.payhere.lk https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:;">
     <meta name="google-site-verification" content="7z1Cqc7CthEcldrOlLCsNL_OYUkFBaf19TjjGyDnXlE" />
     <title>almpi.com.lk - A/L Paper Skill Builder</title>
     
+    <!-- Added MD5 library script required to generate PayHere payment hashes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -437,7 +439,7 @@
         #session-status-bar.admin-view-bar {
             background: rgba(120, 53, 15, 0.75);
             border: 1px solid #d97706;
-            color: fcd34d;
+            color: #fcd34d;
         }
 
         #session-status-bar.guest-view-bar {
@@ -2289,35 +2291,33 @@
     }
 
     // PayHere Payment Integration (Live Mode Active)
-function startCheckout(event, itemId, itemDescription, amount, sectionId) {
-    const sessionType = localStorage.getItem('almpi_session_type');
+    function startCheckout(event, itemId, itemDescription, amount, sectionId) {
+        const sessionType = localStorage.getItem('almpi_session_type');
 
-    if (sessionType === 'guest') {
-        alert("You are currently browsing as a Guest Visitor. Please switch to Student Login to purchase and unlock packages!");
-        window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
-        return;
-    }
+        if (sessionType === 'guest') {
+            alert("You are currently browsing as a Guest Visitor. Please switch to Student Login to purchase and unlock packages!");
+            window.scrollTo({ top: document.getElementById('auth-modal').offsetTop - 50, behavior: 'smooth' });
+            return;
+        }
 
-    const firstName = localStorage.getItem('almpi_first_name') || 'Student';
-    const lastName = localStorage.getItem('almpi_last_name') || 'User';
-    const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
+        const firstName = localStorage.getItem('almpi_first_name') || 'Student';
+        const lastName = localStorage.getItem('almpi_last_name') || 'User';
+        const email = localStorage.getItem('almpi_email') || 'student@almpi.com.lk';
 
-    // === ADD THESE LINES HERE SO ORDER ID AND HASH MATCH CORRECTLY ===
-    const merchantId = "235046";
-    const merchantSecret = "NDI3NzI4MzQzNjMxMzYyNjkxMjcxMDU1NjI=";
-    const orderId = "ALMPI_" + itemId + "_" + Date.now();
-    const formattedAmount = amount.toFixed(2);
-    const currency = "LKR";
+        const merchantId = "235046";
+        const merchantSecret = "NDI3NzI4MzQzNjMxMzYyNjkxMjcxMDU1NjI2MDUzMjYzNjMyNjQxMg==";
+        const orderId = "ALMPI_" + itemId + "_" + Date.now();
+        const formattedAmount = amount.toFixed(2);
+        const currency = "LKR";
 
-    // Generate MD5 Hash using md5 library
-    const hashedSecret = md5(merchantSecret).toUpperCase();
-    const hashValue = md5(merchantId + orderId + formattedAmount + currency + hashedSecret).toUpperCase();
-    // =================================================================
+        // Generate MD5 Hash using md5 library
+        const hashedSecret = md5(merchantSecret).toUpperCase();
+        const hashValue = md5(merchantId + orderId + formattedAmount + currency + hashedSecret).toUpperCase();
 	
         // Payment setup object for PayHere (Live Mode: sandbox set to false)
         var payment = {
-            sandbox: false, // 👈 Switched to Live Production Mode
-            merchant_id: "235046", // Replace with your live merchant ID if different
+            sandbox: false,
+            merchant_id: merchantId,
             return_url: "https://almpi.com.lk",
             cancel_url: "https://almpi.com.lk",
             notify_url: "https://almpi.com.lk/notify",
@@ -2325,7 +2325,7 @@ function startCheckout(event, itemId, itemDescription, amount, sectionId) {
             items: itemDescription,
             amount: formattedAmount,
             currency: "LKR",
-			hash: hashValue,
+            hash: hashValue,
             first_name: firstName,
             last_name: lastName,
             email: email,
