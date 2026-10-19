@@ -7,7 +7,7 @@
     <meta name="google-site-verification" content="7z1Cqc7CthEcldrOlLCsNL_OYUkFBaf19TjjGyDnXlE" />
     <title>almpi.com.lk - A/L Paper Skill Builder</title>
     
-    <!-- Added MD5 library script required to generate PayHere payment hashes -->
+    <!-- MD5 library script required to generate PayHere payment hashes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
     <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
 
@@ -2289,8 +2289,7 @@
             goHome(null);
         }
     }
-
-    // PayHere Payment Integration (Live Mode Active)
+// PayHere Payment Integration (Live Mode Active)
     function startCheckout(event, itemId, itemDescription, amount, sectionId) {
         const sessionType = localStorage.getItem('almpi_session_type');
 
@@ -2340,26 +2339,25 @@
             custom_2: sectionId
         };
 
+        // Called when the checkout popup closes
         payhere.onCompleted = function onCompleted(orderId) {
-            console.log("Payment completed. OrderID:" + orderId);
-            unlockPackageUI(itemId);
+            console.log("Checkout closed for order ID: " + orderId);
             
-            // Save to unlocked storage
-            let unlocked = JSON.parse(localStorage.getItem('almpi_unlocked') || '[]');
-            if (!unlocked.includes(itemId)) {
-                unlocked.push(itemId);
-                localStorage.setItem('almpi_unlocked', JSON.stringify(unlocked));
-            }
-            alert("Payment successful! Your learning package is now unlocked.");
+            // SECURITY FIX: Since frontend JS cannot verify backend payment status codes,
+            // we keep the package locked on popup closure to prevent free unlocusing on cancellation.
+            alert("Payment window closed. If your payment was successful, please refresh or contact support at support@almpi.com.lk to unlock your package.");
         };
 
+        // Called when user explicitly dismisses the payment modal
         payhere.onDismissed = function onDismissed() {
-            console.log("Payment dismissed");
+            console.log("Payment dialog was dismissed/cancelled by the user.");
+            alert("Payment was cancelled. The package remains locked.");
         };
 
+        // Called if parameters are invalid
         payhere.onError = function onError(error) {
-            console.log("Error:" + error);
-            alert("Payment Error: " + error);
+            console.log("Payment Error:" + error);
+            alert("Payment failed: " + error + ". Please try again.");
         };
 
         payhere.startPayment(payment);
